@@ -1,0 +1,14 @@
+Metadata-Version: 2.4
+Name: microstructure
+Version: 0.1.0
+Summary: Market microstructure research platform over recorded Binance.US order book and trade data
+Requires-Python: >=3.13
+Requires-Dist: pandas
+Requires-Dist: pyarrow
+Requires-Dist: matplotlib
+Requires-Dist: scipy
+Requires-Dist: statsmodels
+Provides-Extra: dev
+Requires-Dist: pytest; extra == "dev"
+Requires-Dist: ruff; extra == "dev"
+Requires-Dist: mypy; extra == "dev"

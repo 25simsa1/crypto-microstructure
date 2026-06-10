@@ -1,0 +1,11 @@
+pyproject.toml
+src/microstructure/__init__.py
+src/microstructure/ingest.py
+src/microstructure/parquet.py
+src/microstructure/quality.py
+src/microstructure.egg-info/PKG-INFO
+src/microstructure.egg-info/SOURCES.txt
+src/microstructure.egg-info/dependency_links.txt
+src/microstructure.egg-info/requires.txt
+src/microstructure.egg-info/top_level.txt
+tests/test_ingest.py

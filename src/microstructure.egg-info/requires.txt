@@ -1,0 +1,10 @@
+pandas
+pyarrow
+matplotlib
+scipy
+statsmodels
+
+[dev]
+pytest
+ruff
+mypy
