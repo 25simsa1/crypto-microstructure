@@ -1,12 +1,12 @@
 # Trade-tape analysis
 
-_Data: 2026-06-10 05:03 → 08:52 UTC (~3.8 h of single-venue Binance.US capture). Conclusions are conditional on this one overnight session._
+_Data: 2026-06-10 05:03 → 09:25 UTC (~4.4 h of single-venue Binance.US capture). Conclusions are conditional on this one overnight session._
 
 | symbol | trades | buy share | median eff spread (bps) | median quoted (bps) | sign ACF lags 1-5 | LB p (10 lags) | runs z | volume bars |
 |---|---|---|---|---|---|---|---|---|
-| BTCUSDT | 317 | 52% | 2.39 | 2.54 | -0.026 | 0.005 | +2.44 | 90 |
-| ETHUSDT | 311 | 50% | 2.40 | 2.51 | +0.046 | 0.011 | +1.65 | 117 |
-| SOLUSDT | 283 | 52% | 3.11 | 3.12 | +0.165 | 0.000 | -2.89 | 100 |
+| BTCUSDT | 374 | 48% | 2.44 | 2.54 | +0.009 | 0.004 | +2.20 | 108 |
+| ETHUSDT | 362 | 49% | 2.40 | 2.50 | +0.051 | 0.004 | +1.06 | 133 |
+| SOLUSDT | 319 | 49% | 3.11 | 3.13 | +0.192 | 0.000 | -3.75 | 112 |
 
 Pooled corr(net flow, bar return) across symbols: **+0.03**.
 
