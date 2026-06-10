@@ -49,3 +49,8 @@ Running record of the overnight shift. Newest entries at the bottom.
 ## 03:30 PT — Iteration: anomaly detection
 - New `anomaly.py` (trailing median+MAD episodes, past-only) + `analysis_anomalies.py` wired into Makefile/FINDINGS, with tests on synthetic books with planted events.
 - Two real tuning lessons: (1) MAD needs a double warmup (median first, then deviations) which silently NaN'd the vol detector — made min_periods explicit; (2) MAD-based z on tick-quantized spreads flags routine one-tick flickers (376 "episodes"!) — switched spread/depth to multiplicative thresholds with a 3s minimum duration → 9 genuine episodes: ETH 6 spread blowouts (to ~10-12 bps) + 1 depth evaporation, BTC/SOL one vol shift each.
+
+## 04:00 PT — Iteration: order-flow memory significance
+- Added Ljung-Box (10 lags) + Wald-Wolfowitz runs test to the tape analysis, with sanity tests for the runs statistic.
+- SOL's sign memory survived the thicker tape: LB p < 0.001, ACF lags 1-5 = +0.15 — genuine (one-night) order-flow persistence. BTC/ETH instead show mild *alternation* (runs z ≈ +2), i.e. bid-ask bounce.
+- Honest correction: SOL's "effective spread at half the quoted" from the 60-trade tape vanished at 206 trades (3.10 vs 3.12 bps). Early-night descriptive stats don't survive; this is why everything re-runs on the full capture.

@@ -12,6 +12,8 @@ Three views per symbol:
 
 import matplotlib.pyplot as plt
 import numpy as np
+import pandas as pd
+from statsmodels.stats.diagnostic import acorr_ljungbox
 
 from microstructure import features as F
 from microstructure.analysis import (
@@ -24,6 +26,24 @@ from microstructure.analysis import (
 from microstructure.parquet import load_trades
 
 MAX_LAG = 20
+
+
+def runs_test_z(signs: pd.Series) -> float:
+    """Wald–Wolfowitz runs test on the +/- sign sequence.
+
+    z < 0 means fewer runs than chance (persistence / order-flow
+    memory); z > 0 means alternation. |z| > 1.96 ~ 5% two-sided.
+    """
+    s = signs[signs != 0].to_numpy()
+    n_pos = int((s > 0).sum())
+    n_neg = int((s < 0).sum())
+    n = n_pos + n_neg
+    if n_pos == 0 or n_neg == 0 or n < 3:
+        return float("nan")
+    runs = 1 + int((s[1:] != s[:-1]).sum())
+    mean = 2.0 * n_pos * n_neg / n + 1.0
+    var = (mean - 1.0) * (mean - 2.0) / (n - 1.0)
+    return float((runs - mean) / np.sqrt(var)) if var > 0 else float("nan")
 
 
 def main() -> None:
@@ -50,10 +70,13 @@ def main() -> None:
             impact_pts += list(zip(norm_flow, ret_bps, strict=True))
             axes[2].scatter(norm_flow, ret_bps, s=18, alpha=0.7, label=sym.upper())
         buy_share = float((trades["signed_qty"] > 0).mean())
+        signs = np.sign(trades["signed_qty"])
+        lb_p = float(acorr_ljungbox(signs, lags=[10], return_df=True)["lb_pvalue"].iloc[0])
+        rz = runs_test_z(signs)
         rows.append(
             f"| {sym.upper()} | {len(trades):,} | {buy_share:.0%} | "
             f"{es.median():.2f} | {qs.median():.2f} | "
-            f"{float(acf.iloc[:5].mean()):+.3f} | {len(bars)} |"
+            f"{float(acf.iloc[:5].mean()):+.3f} | {lb_p:.3f} | {rz:+.2f} | {len(bars)} |"
         )
 
     band_n = min(len(load_trades(PARQUET_DIR, s)) for s in books)
@@ -94,13 +117,19 @@ def main() -> None:
             data_span_note(books),
             "",
             "| symbol | trades | buy share | median eff spread (bps) "
-            "| median quoted (bps) | sign ACF lags 1-5 | volume bars |",
-            "|---|---|---|---|---|---|---|",
+            "| median quoted (bps) | sign ACF lags 1-5 | LB p (10 lags) "
+            "| runs z | volume bars |",
+            "|---|---|---|---|---|---|---|---|---|",
             *rows,
             "",
             f"Pooled corr(net flow, bar return) across symbols: **{impact_corr:+.2f}**.",
             "",
             "![chart](analysis_tape.png)",
+            "",
+            "**Significance:** Ljung–Box (10 lags) tests 'signs are white "
+            "noise'; the runs test z is negative under persistence. Both "
+            "are joint with the thin-tape caveat below — a p of 0.04 on "
+            "one night and one venue is a hint, not a finding.",
             "",
             "**Caveats:** the overnight tape is thin (hundreds of trades, not "
             "thousands), so sign-ACF confidence bands are wide and the "
