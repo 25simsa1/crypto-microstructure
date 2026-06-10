@@ -1,14 +1,14 @@
 # Backtest: imbalance strategy family vs random null
 
-_Data: 2026-06-10 05:03 → 05:58 UTC (~0.9 h of single-venue Binance.US capture). Conclusions are conditional on this one overnight session._
+_Data: 2026-06-10 05:03 → 06:28 UTC (~1.4 h of single-venue Binance.US capture). Conclusions are conditional on this one overnight session._
 
 Execution: taker-only, walk the displayed book, fills capped at displayed size, 10 bps taker fee per side, one-snapshot (~1 s) execution delay. Sharpe annualized from ~1 s bars.
 
 | symbol | best cfg (θ/hold) | ann. Sharpe | deflated SR (9 trials) | trades | fees | max DD | random null Sharpe (μ±σ, 50 seeds) | random p95 |
 |---|---|---|---|---|---|---|---|---|
-| BTCUSDT | 0.7/60s | -469.67 | 0.00 | 23 | $2.82 | -0.033% | -489.47 ± 52.94 | -408.82 |
-| ETHUSDT | 0.3/60s | -276.75 | 0.00 | 17 | $1.71 | -0.022% | -449.32 ± 53.96 | -359.19 |
-| SOLUSDT | 0.7/60s | -625.92 | 0.00 | 55 | $7.05 | -0.083% | -454.50 ± 56.87 | -359.10 |
+| BTCUSDT | 0.7/60s | -489.08 | 0.00 | 44 | $5.39 | -0.059% | -483.71 ± 42.59 | -420.84 |
+| ETHUSDT | 0.3/60s | -318.84 | 0.00 | 30 | $3.01 | -0.040% | -451.73 ± 43.50 | -378.86 |
+| SOLUSDT | 0.7/60s | -641.67 | 0.00 | 80 | $10.25 | -0.127% | -456.30 ± 48.58 | -387.05 |
 
 ![chart](backtest.png)
 

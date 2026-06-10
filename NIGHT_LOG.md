@@ -36,3 +36,7 @@ Running record of the overnight shift. Newest entries at the bottom.
 - `make all` refreshed on ~3.2k snaps/symbol. Quality layer caught its first real gap: SOL coverage 99.26% (one short disconnect). BTC/ETH still 100%.
 - Built `effective_spread_bps`, `trade_sign_autocorr`, `volume_bars` with hand-computed tests. Found and fixed a real float bug: cumsum hitting 1.999...8 instead of 2.0 pushed bucket-boundary trades into the wrong volume bar.
 - First tape findings (~60-75 trades/symbol — thin overnight tape): effective spread < quoted everywhere (SOL: 1.56 vs 3.13 bps — trades print well inside the touch), sign autocorrelation near zero at these counts, nothing like the textbook long memory yet. Needs the full night's tape.
+
+## 02:30 PT — Iteration: Epps effect
+- ~4.9k snaps/symbol now; SOL coverage 99.41% (its earlier gap shrinking as a share of the night), BTC/ETH still perfect.
+- New study `analysis_epps.py`, wired into Makefile + FINDINGS: pairwise correlation vs sampling interval (1s → 300s). Result is textbook: BTC/ETH goes 0.34 @ 1s → 0.94 @ 300s, with half the long-run correlation already there by ~2s. Cross-asset information on this venue propagates fast, but 1s returns still mostly miss it — quantifies why the lead-lag study found nothing at 1s resolution.
