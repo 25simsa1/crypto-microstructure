@@ -31,3 +31,8 @@ Running record of the overnight shift. Newest entries at the bottom.
 - Phase 1-5 done and committed: typed data layer + parquet store, hand-tested feature library, four statistical studies, anti-lookahead backtester with deflated Sharpe + random null, README/Makefile/FINDINGS, ruff + strict mypy + 23 tests green.
 - Honest results so far: no imbalance feature clears the Bonferroni bar; no lead-lag beyond lag 0; all strategies lose to fees (deflated SR 0.00) — as they should on 2 bps spreads with 10 bps taker fees.
 - Rest of night: rerun `make all` as data grows; build trade-tape features (effective spread, trade-sign autocorrelation); refresh FINDINGS near morning.
+
+## 02:05 PT — Iteration: trade-tape features
+- `make all` refreshed on ~3.2k snaps/symbol. Quality layer caught its first real gap: SOL coverage 99.26% (one short disconnect). BTC/ETH still 100%.
+- Built `effective_spread_bps`, `trade_sign_autocorr`, `volume_bars` with hand-computed tests. Found and fixed a real float bug: cumsum hitting 1.999...8 instead of 2.0 pushed bucket-boundary trades into the wrong volume bar.
+- First tape findings (~60-75 trades/symbol — thin overnight tape): effective spread < quoted everywhere (SOL: 1.56 vs 3.13 bps — trades print well inside the touch), sign autocorrelation near zero at these counts, nothing like the textbook long memory yet. Needs the full night's tape.
