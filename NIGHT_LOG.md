@@ -68,3 +68,6 @@ Running record of the overnight shift. Newest entries at the bottom.
 - Anomaly episodes 13 → 22, and they cluster: 09:10 and 09:21 UTC show simultaneous spread spikes on ETH and SOL plus an ETH vol shift — a genuine cross-symbol liquidity event around 2:10-2:21 PT, visible only because the detectors run per-symbol but timestamp-aligned.
 - SOL flow persistence keeps strengthening as the tape grows: runs z = −3.75, ACF(1-5) = +0.19, LB p < 0.001. This is the night's robust finding.
 - Tape now 319-374 trades/symbol; effective-vs-quoted spread gap essentially nil on all three.
+
+## 06:00 PT — Refresh on 17.2k snaps/symbol
+- Quiet cycle: coverage ≥99.5% everywhere, results stable (SOL runs z −3.90, 24 episodes). No build needed.

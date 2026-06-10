@@ -1,6 +1,6 @@
 # Anomaly episodes
 
-_Data: 2026-06-10 05:03 → 09:25 UTC (~4.4 h of single-venue Binance.US capture). Conclusions are conditional on this one overnight session._
+_Data: 2026-06-10 05:03 → 09:58 UTC (~4.9 h of single-venue Binance.US capture). Conclusions are conditional on this one overnight session._
 
 Detectors use trailing median + MAD only (no future data). Spread spikes: >4x the trailing 15-min median for 3s+. Depth evaporation: <15% of trailing median within ±10 bps for 3s+. Vol shifts: 1-min RV >6 MADs over 30 min.
 
@@ -26,9 +26,11 @@ Detectors use trailing median + MAD only (no future data). Spread spikes: >4x th
 | ETHUSDT | vol_shift | 09:21:00 | 0s | 6.25e-06 | 8.45e-07 |
 | ETHUSDT | spread_spike | 09:21:06 | 3s | 12.3 | 2.41 |
 | ETHUSDT | spread_spike | 09:21:46 | 9s | 19.4 | 2.41 |
+| ETHUSDT | spread_spike | 09:27:19 | 3s | 12.4 | 2.57 |
+| ETHUSDT | spread_spike | 09:56:04 | 4s | 11.6 | 2.47 |
 | SOLUSDT | vol_shift | 07:11:00 | 0s | 4.22e-06 | 6.24e-07 |
 | SOLUSDT | spread_spike | 09:10:32 | 5s | 14.1 | 3.14 |
 
-**22 episode(s) detected.**
+**24 episode(s) detected.**
 
 ![chart](analysis_anomalies.png)
