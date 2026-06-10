@@ -71,3 +71,20 @@ Running record of the overnight shift. Newest entries at the bottom.
 
 ## 06:00 PT — Refresh on 17.2k snaps/symbol
 - Quiet cycle: coverage ≥99.5% everywhere, results stable (SOL runs z −3.90, 24 episodes). No build needed.
+
+## 06:35 PT — Closing entry: the night in summary
+**Capture:** 01:03 → 06:35 PT, ~5.5h. 19.2k/19.3k/18.5k snapshots (BTC/ETH/SOL), 364-435 trades each, 4.2 MB raw, coverage ≥99.6% everywhere, zero crossed books, zero backwards timestamps.
+
+**Built (16 commits):** typed data layer + idempotent symbol/hour Parquet store; feature library (microprice, OFI, multi-depth imbalance, 3 vol estimators, effective spread, sign ACF, volume bars) all hand-test-verified; 7 statistical studies; anomaly detection; anti-lookahead backtester with deflated Sharpe + 50-seed random null; README/Makefile/FINDINGS; ruff + strict mypy + 34 tests green throughout.
+
+**Findings that survived the night:**
+1. SOL order-flow persistence: sign ACF(1-5) +0.15, LB p<0.001, runs z −2.83 — held from ~200 through 364 trades. BTC/ETH show mild alternation instead.
+2. Epps effect, textbook: pairwise correlations 0.35-0.39 @ 1s → 0.86-0.93 @ 5min, half-saturation by ~2s.
+3. No tradable signal: best backtest config has deflated SR 0.00, inside the random null. Fees ≫ spreads kills taker-only HFT here, and the report says so.
+4. A real cross-symbol liquidity event (09:10-09:21 UTC, ETH+SOL spread spikes + ETH vol shift) caught by the anomaly layer.
+
+**Corrections made along the way (the honest-methodology exhibit):** SOL "executes at half the quoted spread" retracted (thin-tape artifact); BTC mprem Bonferroni-clearing t-stat classified as bounce reversion, not alpha; anomaly detector retuned after MAD z-scores flagged 376 tick-flicker "episodes".
+
+**Bugs found by tests/data, fixed:** EOFError on live gzip tails; float-cumsum volume-bar boundary misassignment; MAD double-warmup NaN.
+
+Loggers left RUNNING for Simon to decide (pkill -f logger.py to stop). Questions in MORNING.md.

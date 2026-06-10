@@ -2,21 +2,22 @@
 
 ## BTCUSDT
 
-- snapshots: **17,164** (2026-06-10 05:03:02 UTC → 2026-06-10 09:58:15 UTC)
-- trades: **408**
-- coverage: **99.97%** (5s lost across 1 gap(s))
+- snapshots: **19,175** (2026-06-10 05:03:02 UTC → 2026-06-10 10:33:19 UTC)
+- trades: **435**
+- coverage: **99.94%** (11s lost across 2 gap(s))
 - crossed books: **0**
 - backwards timestamps: **0**
 
 | gap start | gap end | seconds |
 |---|---|---|
 | 2026-06-10 06:43:01 UTC | 2026-06-10 06:43:06 UTC | 5.0 |
+| 2026-06-10 09:59:18 UTC | 2026-06-10 09:59:24 UTC | 5.9 |
 
 ## ETHUSDT
 
-- snapshots: **17,219** (2026-06-10 05:03:02 UTC → 2026-06-10 09:58:14 UTC)
-- trades: **391**
-- coverage: **99.91%** (17s lost across 3 gap(s))
+- snapshots: **19,269** (2026-06-10 05:03:02 UTC → 2026-06-10 10:33:18 UTC)
+- trades: **432**
+- coverage: **99.92%** (17s lost across 3 gap(s))
 - crossed books: **0**
 - backwards timestamps: **0**
 
@@ -28,9 +29,9 @@
 
 ## SOLUSDT
 
-- snapshots: **16,593** (2026-06-10 05:03:02 UTC → 2026-06-10 09:58:15 UTC)
-- trades: **333**
-- coverage: **99.55%** (80s lost across 12 gap(s))
+- snapshots: **18,522** (2026-06-10 05:03:02 UTC → 2026-06-10 10:33:19 UTC)
+- trades: **364**
+- coverage: **99.57%** (86s lost across 13 gap(s))
 - crossed books: **0**
 - backwards timestamps: **0**
 
@@ -48,3 +49,4 @@
 | 2026-06-10 07:50:50 UTC | 2026-06-10 07:50:59 UTC | 8.4 |
 | 2026-06-10 07:56:26 UTC | 2026-06-10 07:56:33 UTC | 6.3 |
 | 2026-06-10 08:53:53 UTC | 2026-06-10 08:53:59 UTC | 6.2 |
+| 2026-06-10 10:05:04 UTC | 2026-06-10 10:05:10 UTC | 6.1 |
