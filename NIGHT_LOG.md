@@ -88,3 +88,8 @@ Running record of the overnight shift. Newest entries at the bottom.
 **Bugs found by tests/data, fixed:** EOFError on live gzip tails; float-cumsum volume-bar boundary misassignment; MAD double-warmup NaN.
 
 Loggers left RUNNING for Simon to decide (pkill -f logger.py to stop). Questions in MORNING.md.
+
+## 07:40 PT — Postscript: Binance.US went unreachable at ~06:34
+- Both loggers alive and retrying with backoff, but every reconnect since ~06:34 times out at the websocket handshake. REST API also times out while general connectivity and other exchanges respond — a Binance.US-side outage or IP block, not a logger or network failure.
+- The clean capture is therefore 01:03 → 06:34 PT (~5.5 h). The 88.9% coverage in the final data-quality report is this trailing outage counted inside the span; every number in FINDINGS reflects data up to 06:34.
+- Loggers left running: if the venue comes back they resume automatically; `pkill -f logger.py` stops them.
