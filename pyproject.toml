@@ -1,0 +1,41 @@
+[project]
+name = "microstructure"
+version = "0.1.0"
+description = "Market microstructure research platform over recorded Binance.US order book and trade data"
+requires-python = ">=3.13"
+dependencies = [
+    "pandas",
+    "pyarrow",
+    "matplotlib",
+    "scipy",
+    "statsmodels",
+]
+
+[project.optional-dependencies]
+dev = ["pytest", "ruff", "mypy"]
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py313"
+extend-exclude = ["logger.py", "trades_logger.py", "analyze.py"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "UP", "B", "SIM", "RUF"]
+
+[tool.mypy]
+python_version = "3.13"
+mypy_path = "src"
+strict = true
+ignore_missing_imports = true
+exclude = ["logger\\.py", "trades_logger\\.py", "analyze\\.py", "\\.venv"]
