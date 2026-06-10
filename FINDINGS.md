@@ -14,7 +14,7 @@ Sharpe, random-strategy nulls).
 
 ---
 
-_Generated 2026-06-10 06:28 UTC._
+_Generated 2026-06-10 06:55 UTC._
 
 
 ---
@@ -23,25 +23,33 @@ _Generated 2026-06-10 06:28 UTC._
 
 ## BTCUSDT
 
-- snapshots: **5,022** (2026-06-10 05:03:02 UTC → 2026-06-10 06:27:58 UTC)
-- trades: **116**
-- coverage: **100.00%** (0s lost across 0 gap(s))
+- snapshots: **6,506** (2026-06-10 05:03:02 UTC → 2026-06-10 06:54:21 UTC)
+- trades: **159**
+- coverage: **99.92%** (5s lost across 1 gap(s))
 - crossed books: **0**
 - backwards timestamps: **0**
+
+| gap start | gap end | seconds |
+|---|---|---|
+| 2026-06-10 06:43:01 UTC | 2026-06-10 06:43:06 UTC | 5.0 |
 
 ## ETHUSDT
 
-- snapshots: **4,947** (2026-06-10 05:03:02 UTC → 2026-06-10 06:27:58 UTC)
-- trades: **95**
-- coverage: **100.00%** (0s lost across 0 gap(s))
+- snapshots: **6,449** (2026-06-10 05:03:02 UTC → 2026-06-10 06:54:21 UTC)
+- trades: **137**
+- coverage: **99.91%** (6s lost across 1 gap(s))
 - crossed books: **0**
 - backwards timestamps: **0**
 
+| gap start | gap end | seconds |
+|---|---|---|
+| 2026-06-10 06:43:14 UTC | 2026-06-10 06:43:20 UTC | 6.1 |
+
 ## SOLUSDT
 
-- snapshots: **4,763** (2026-06-10 05:03:02 UTC → 2026-06-10 06:27:58 UTC)
-- trades: **82**
-- coverage: **99.42%** (30s lost across 5 gap(s))
+- snapshots: **6,240** (2026-06-10 05:03:02 UTC → 2026-06-10 06:54:21 UTC)
+- trades: **135**
+- coverage: **99.55%** (30s lost across 5 gap(s))
 - crossed books: **0**
 - backwards timestamps: **0**
 
@@ -161,6 +169,24 @@ Observations per interval: 4,128 at 1s down to 17 at 300s.
 ![chart](output/analysis_epps.png)
 
 **Read:** correlation rising with the sampling interval is the classic Epps signature of asynchronous price updates. The saturation timescale bounds how fast cross-asset information propagates *on this venue*. The 300 s points rest on few observations overnight — widest error bars on the right.
+
+---
+
+## Trade-tape analysis
+
+_Data: 2026-06-10 05:03 → 06:55 UTC (~1.9 h of single-venue Binance.US capture). Conclusions are conditional on this one overnight session._
+
+| symbol | trades | buy share | median eff spread (bps) | median quoted (bps) | sign ACF lags 1-5 | volume bars |
+|---|---|---|---|---|---|---|
+| BTCUSDT | 161 | 56% | 2.26 | 2.35 | -0.050 | 51 |
+| ETHUSDT | 139 | 53% | 2.45 | 2.58 | +0.001 | 50 |
+| SOLUSDT | 137 | 54% | 1.57 | 3.12 | +0.206 | 58 |
+
+Pooled corr(net flow, bar return) across symbols: **+0.12**.
+
+![chart](output/analysis_tape.png)
+
+**Caveats:** the overnight tape is thin (hundreds of trades, not thousands), so sign-ACF confidence bands are wide and the flow/return scatter is descriptive only. Effective spread uses the 1 s book mid as the benchmark — staleness up to 1 s biases it upward when the market moves between snapshot and trade.
 
 ---
 

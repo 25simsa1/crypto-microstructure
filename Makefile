@@ -13,6 +13,7 @@ analyses: data   ## run the four studies (PNG + md each)
 	$(PY) scripts/analysis_leadlag.py
 	$(PY) scripts/analysis_volclustering.py
 	$(PY) scripts/analysis_epps.py
+	$(PY) scripts/analysis_tape.py
 
 backtest: data   ## strategy family vs random null
 	$(PY) scripts/run_backtest.py

@@ -40,3 +40,8 @@ Running record of the overnight shift. Newest entries at the bottom.
 ## 02:30 PT — Iteration: Epps effect
 - ~4.9k snaps/symbol now; SOL coverage 99.41% (its earlier gap shrinking as a share of the night), BTC/ETH still perfect.
 - New study `analysis_epps.py`, wired into Makefile + FINDINGS: pairwise correlation vs sampling interval (1s → 300s). Result is textbook: BTC/ETH goes 0.34 @ 1s → 0.94 @ 300s, with half the long-run correlation already there by ~2s. Cross-asset information on this venue propagates fast, but 1s returns still mostly miss it — quantifies why the lead-lag study found nothing at 1s resolution.
+
+## 02:58 PT — Iteration: tape analysis wired in
+- ~6.5k snaps/symbol; all three symbols show one ~5s reconnect blip (99.9% coverage) — the quality report catches it.
+- New `analysis_tape.py` in Makefile + FINDINGS: effective vs quoted spread, sign-ACF with null band, volume-bar flow-vs-return scatter.
+- SOL is the interesting one: effective spread half the quoted (1.57 vs 3.12 bps — takers time their entries inside the wide touch) and sign ACF +0.21 over lags 1-5, the first hint of order-flow memory. BTC/ETH tape still looks memoryless at these counts.

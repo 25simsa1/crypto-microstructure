@@ -19,6 +19,7 @@ SECTIONS = [
     ("analysis_leadlag.md", None),
     ("analysis_volclustering.md", None),
     ("analysis_epps.md", None),
+    ("analysis_tape.md", None),
     ("backtest.md", None),
 ]
 
