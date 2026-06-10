@@ -9,6 +9,7 @@ import matplotlib
 matplotlib.use("Agg")
 import matplotlib.pyplot as plt
 import pandas as pd
+from matplotlib.figure import Figure
 
 from .parquet import build_book_parquet, build_trade_parquet, load_books
 
@@ -55,7 +56,7 @@ def aligned_mids(books: dict[str, pd.DataFrame], freq: str = "1s") -> pd.DataFra
     return pd.DataFrame(cols).dropna(how="all")
 
 
-def save_outputs(name: str, fig: plt.Figure, markdown: str) -> tuple[Path, Path]:
+def save_outputs(name: str, fig: Figure, markdown: str) -> tuple[Path, Path]:
     """Write ``output/<name>.png`` and ``output/<name>.md``."""
     OUTPUT_DIR.mkdir(exist_ok=True)
     png = OUTPUT_DIR / f"{name}.png"

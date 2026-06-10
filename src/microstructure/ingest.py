@@ -17,6 +17,7 @@ import json
 from collections.abc import Iterator
 from dataclasses import dataclass
 from pathlib import Path
+from typing import cast
 
 
 @dataclass(frozen=True, slots=True)
@@ -81,7 +82,7 @@ def _iter_jsonl_gz(path: Path) -> Iterator[dict[str, object]]:
 
 
 def _level(raw: object) -> tuple[float, float]:
-    price, qty = raw  # type: ignore[misc]
+    price, qty = cast("tuple[str, str]", raw)  # JSON numbers arrive as strings
     return float(price), float(qty)
 
 
@@ -93,12 +94,12 @@ def iter_book_snapshots(data_dir: Path) -> Iterator[BookSnapshot]:
     """
     for name in sorted(glob.glob(str(data_dir / "book-*.jsonl.gz"))):
         for obj in _iter_jsonl_gz(Path(name)):
-            bids = tuple(_level(x) for x in obj["bids"])  # type: ignore[union-attr, arg-type]
-            asks = tuple(_level(x) for x in obj["asks"])  # type: ignore[union-attr, arg-type]
+            bids = tuple(_level(x) for x in cast("list[object]", obj["bids"]))
+            asks = tuple(_level(x) for x in cast("list[object]", obj["asks"]))
             if not bids or not asks:
                 continue
             yield BookSnapshot(
-                ts=float(obj["ts"]),  # type: ignore[arg-type]
+                ts=cast("float", obj["ts"]),
                 symbol=str(obj["symbol"]),
                 bids=bids,
                 asks=asks,
@@ -110,9 +111,9 @@ def iter_trades(data_dir: Path) -> Iterator[Trade]:
     for name in sorted(glob.glob(str(data_dir / "trades-*.jsonl.gz"))):
         for obj in _iter_jsonl_gz(Path(name)):
             yield Trade(
-                ts=float(obj["ts"]),  # type: ignore[arg-type]
+                ts=cast("float", obj["ts"]),
                 symbol=str(obj["symbol"]),
-                price=float(obj["price"]),  # type: ignore[arg-type]
-                qty=float(obj["qty"]),  # type: ignore[arg-type]
+                price=float(cast("str", obj["price"])),
+                qty=float(cast("str", obj["qty"])),
                 buyer_maker=bool(obj["buyer_maker"]),
             )

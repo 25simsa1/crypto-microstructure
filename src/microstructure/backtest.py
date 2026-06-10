@@ -21,7 +21,7 @@ What this harness can NOT model (single venue, 1 s snapshots):
 from __future__ import annotations
 
 from collections.abc import Callable, Iterator
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 
 import numpy as np
 import pandas as pd

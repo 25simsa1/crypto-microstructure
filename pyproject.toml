@@ -32,6 +32,7 @@ extend-exclude = ["logger.py", "trades_logger.py", "analyze.py"]
 
 [tool.ruff.lint]
 select = ["E", "F", "W", "I", "UP", "B", "SIM", "RUF"]
+ignore = ["RUF001", "RUF002"]  # en-dashes in citations are intentional
 
 [tool.mypy]
 python_version = "3.13"

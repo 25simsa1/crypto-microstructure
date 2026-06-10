@@ -37,7 +37,13 @@ def data_dir(tmp_path: Path) -> Path:
     with gzip.open(tmp_path / "trades-20260610-05.jsonl.gz", "at") as fh:
         fh.write(
             json.dumps(
-                {"ts": T0, "symbol": "btcusdt", "price": "100.05", "qty": "0.5", "buyer_maker": True}
+                {
+                    "ts": T0,
+                    "symbol": "btcusdt",
+                    "price": "100.05",
+                    "qty": "0.5",
+                    "buyer_maker": True,
+                }
             )
             + "\n"
         )

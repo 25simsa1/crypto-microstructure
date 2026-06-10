@@ -8,7 +8,6 @@ the markdown is explicit about that.
 """
 
 import matplotlib.pyplot as plt
-import pandas as pd
 
 from microstructure import features as F
 from microstructure.analysis import (

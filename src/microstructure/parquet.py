@@ -20,7 +20,7 @@ from pathlib import Path
 
 import pandas as pd
 
-from .ingest import BookSnapshot, Trade, iter_book_snapshots, iter_trades
+from .ingest import BookSnapshot, iter_book_snapshots, iter_trades
 
 N_LEVELS = 20
 

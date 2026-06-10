@@ -85,7 +85,9 @@ def depth_notional(book: pd.DataFrame, side: str, within_bps: float) -> pd.Serie
     return total
 
 
-def depth_profile(book: pd.DataFrame, bands_bps: tuple[float, ...] = (1, 5, 10, 25, 50)) -> pd.DataFrame:
+def depth_profile(
+    book: pd.DataFrame, bands_bps: tuple[float, ...] = (1, 5, 10, 25, 50)
+) -> pd.DataFrame:
     """Bid/ask notional within each band of the mid, one column per band."""
     out = {}
     for b in bands_bps:
