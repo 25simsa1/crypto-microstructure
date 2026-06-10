@@ -1,12 +1,12 @@
 # Cross-asset lead-lag
 
-_Data: 2026-06-10 05:03 → 05:30 UTC (~0.5 h of single-venue Binance.US capture). Conclusions are conditional on this one overnight session._
+_Data: 2026-06-10 05:03 → 05:58 UTC (~0.9 h of single-venue Binance.US capture). Conclusions are conditional on this one overnight session._
 
 | pair | contemporaneous corr | peak lag | peak corr | 95% null band |
 |---|---|---|---|---|
-| BTCUSDT/ETHUSDT | +0.303 | +0s | +0.303 | 0.053 |
-| BTCUSDT/SOLUSDT | +0.346 | +0s | +0.346 | 0.053 |
-| ETHUSDT/SOLUSDT | +0.347 | +0s | +0.347 | 0.053 |
+| BTCUSDT/ETHUSDT | +0.324 | +0s | +0.324 | 0.039 |
+| BTCUSDT/SOLUSDT | +0.382 | +0s | +0.382 | 0.039 |
+| ETHUSDT/SOLUSDT | +0.347 | +0s | +0.347 | 0.039 |
 
 ![chart](analysis_leadlag.png)
 

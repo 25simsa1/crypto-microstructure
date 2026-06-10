@@ -26,3 +26,8 @@ Running record of the overnight shift. Newest entries at the bottom.
 5. Self-regenerating HTML dashboard (`dashboard.html`)
 6. Time-of-night seasonality analysis (does liquidity die at a specific hour?)
 7. Final deliverable: `RESEARCH.md` — a structured research note with figures, written like a desk note
+
+## 01:45 PT — All five phases of the platform build complete
+- Phase 1-5 done and committed: typed data layer + parquet store, hand-tested feature library, four statistical studies, anti-lookahead backtester with deflated Sharpe + random null, README/Makefile/FINDINGS, ruff + strict mypy + 23 tests green.
+- Honest results so far: no imbalance feature clears the Bonferroni bar; no lead-lag beyond lag 0; all strategies lose to fees (deflated SR 0.00) — as they should on 2 bps spreads with 10 bps taker fees.
+- Rest of night: rerun `make all` as data grows; build trade-tape features (effective spread, trade-sign autocorrelation); refresh FINDINGS near morning.

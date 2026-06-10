@@ -106,3 +106,60 @@ def test_rolling_zscore_is_backward_looking() -> None:
     assert z.iloc[-1] > 3.0
     # constant history → std 0 → earlier values are nan or 0, never inf
     assert not np.isinf(z.fillna(0.0)).any()
+
+
+# ---------------------------------------------------------------------------
+# trade-tape features
+# ---------------------------------------------------------------------------
+
+
+def make_trades(prices: list[float], qtys: list[float], signs: list[int]) -> pd.DataFrame:
+    idx = pd.date_range("2026-06-10 05:00:00", periods=len(prices), freq="1s", tz="UTC")
+    return pd.DataFrame(
+        {
+            "price": prices,
+            "qty": qtys,
+            "signed_qty": [q * s for q, s in zip(qtys, signs, strict=True)],
+        },
+        index=idx,
+    )
+
+
+def test_effective_spread_hand_computed() -> None:
+    mid_idx = pd.date_range("2026-06-10 04:59:59", periods=1, freq="1s", tz="UTC")
+    mids = pd.Series([100.0], index=mid_idx)
+    trades = make_trades([100.05], [1.0], [1])
+    es = F.effective_spread_bps(trades, mids)
+    # 2 * |100.05 - 100| / 100 * 1e4 = 10 bps
+    assert es.iloc[0] == pytest.approx(10.0)
+
+
+def test_effective_spread_drops_trades_before_first_mid() -> None:
+    mid_idx = pd.date_range("2026-06-10 05:00:30", periods=1, freq="1s", tz="UTC")
+    mids = pd.Series([100.0], index=mid_idx)
+    trades = make_trades([100.05, 100.1], [1.0, 1.0], [1, 1])  # both before 05:00:30
+    assert len(F.effective_spread_bps(trades, mids)) == 0
+
+
+def test_trade_sign_autocorr_alternating() -> None:
+    trades = make_trades([100.0] * 8, [1.0] * 8, [1, -1, 1, -1, 1, -1, 1, -1])
+    acf = F.trade_sign_autocorr(trades, max_lag=2)
+    assert acf.loc[1] == pytest.approx(-1.0)
+    assert acf.loc[2] == pytest.approx(1.0)
+
+
+def test_volume_bars_hand_computed() -> None:
+    trades = make_trades(
+        [100.0, 101.0, 102.0, 103.0, 104.0],
+        [0.4, 0.6, 0.5, 0.5, 0.3],
+        [1, -1, 1, 1, 1],
+    )
+    bars = F.volume_bars(trades, bucket_qty=1.0)
+    assert len(bars) == 2  # trailing 0.3 partial dropped
+    assert bars["qty"].iloc[0] == pytest.approx(1.0)
+    assert bars["open"].iloc[0] == 100.0
+    assert bars["close"].iloc[0] == 101.0
+    assert bars["vwap"].iloc[0] == pytest.approx(100.0 * 0.4 + 101.0 * 0.6)
+    assert bars["net_signed_qty"].iloc[0] == pytest.approx(0.4 - 0.6)
+    assert bars["vwap"].iloc[1] == pytest.approx(102.5)
+    assert bars["seconds"].iloc[0] == pytest.approx(1.0)

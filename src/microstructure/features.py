@@ -184,3 +184,73 @@ def rolling_zscore(s: pd.Series, window: str = "30min", min_periods: int = 30) -
     """
     r = s.rolling(window, min_periods=min_periods)
     return (s - r.mean()) / r.std()
+
+
+# ---------------------------------------------------------------------------
+# trade-tape features (need the trades frame from parquet.load_trades)
+# ---------------------------------------------------------------------------
+
+
+def effective_spread_bps(trades: pd.DataFrame, mid_series: pd.Series) -> pd.Series:
+    """Effective spread per trade: ``2 * |p - m| / m * 1e4`` bps.
+
+    ``m`` is the prevailing mid — the last book mid at or before the
+    trade (asof join; trades before the first snapshot are dropped).
+    Compare to the *quoted* spread: effective < quoted means trades
+    happen inside the touch; effective > quoted means takers ate
+    through the level or the 1 s mid is stale.
+    """
+    mid_sorted = mid_series.sort_index()
+    m = pd.merge_asof(
+        trades[["price"]].sort_index(),
+        mid_sorted.rename("mid"),
+        left_index=True,
+        right_index=True,
+        direction="backward",
+    ).dropna()
+    return (2.0 * (m["price"] - m["mid"]).abs() / m["mid"] * 1e4).rename("eff_spread_bps")
+
+
+def trade_sign_autocorr(trades: pd.DataFrame, max_lag: int = 50) -> pd.Series:
+    """Autocorrelation of trade signs at lags 1..``max_lag`` (in trades).
+
+    Order flow has long memory (Lillo & Farmer 2004): signs decay
+    slowly because large parent orders are sliced. Index = lag.
+    """
+    signs = np.sign(trades["signed_qty"]).astype(float)
+    acf = {k: float(signs.autocorr(lag=k)) for k in range(1, max_lag + 1)}
+    return pd.Series(acf, name="sign_acf")
+
+
+def volume_bars(trades: pd.DataFrame, bucket_qty: float) -> pd.DataFrame:
+    """Aggregate trades into equal-*volume* bars of ``bucket_qty`` base units.
+
+    Each bar reports open/high/low/close/vwap, total qty, net signed
+    qty, and the wall-clock seconds it took to fill — the 'volume
+    clock' (Easley, López de Prado & O'Hara): bars fill fast when
+    activity is high, so bar returns are closer to homoskedastic than
+    time bars. The trailing partial bucket is dropped.
+    """
+    cum = trades["qty"].cumsum()
+    # assign by cumulative volume *before* the trade so the fill that
+    # completes a bucket belongs to that bucket, not the next one; the
+    # epsilon keeps float cumsum error (2.0 -> 1.999...8) from shifting
+    # boundary trades into the wrong bucket
+    bar_id = np.floor((cum - trades["qty"]) / bucket_qty + 1e-9).astype(int)
+    g = trades.groupby(bar_id)
+    out = pd.DataFrame(
+        {
+            "open": g["price"].first(),
+            "high": g["price"].max(),
+            "low": g["price"].min(),
+            "close": g["price"].last(),
+            "vwap": g.apply(lambda x: float((x["price"] * x["qty"]).sum() / x["qty"].sum())),
+            "qty": g["qty"].sum(),
+            "net_signed_qty": g["signed_qty"].sum(),
+            "start": g.apply(lambda x: x.index[0]),
+            "seconds": g.apply(lambda x: (x.index[-1] - x.index[0]).total_seconds()),
+        }
+    )
+    if len(out) > 0 and out["qty"].iloc[-1] < bucket_qty * 0.999:
+        out = out.iloc[:-1]  # trailing partial bucket
+    return out

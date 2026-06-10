@@ -1,12 +1,12 @@
 # Volatility clustering and jumps
 
-_Data: 2026-06-10 05:03 → 05:30 UTC (~0.5 h of single-venue Binance.US capture). Conclusions are conditional on this one overnight session._
+_Data: 2026-06-10 05:03 → 05:58 UTC (~0.9 h of single-venue Binance.US capture). Conclusions are conditional on this one overnight session._
 
 | symbol | mean ACF lags 1-5 | Ljung-Box p (10 lags) | median ann. vol | jump share of variance |
 |---|---|---|---|---|
-| BTCUSDT | -0.102 | 0.91 | 34.8% | 36.7% |
-| ETHUSDT | +0.041 | 0.91 | 66.7% | 18.7% |
-| SOLUSDT | -0.170 | 0.0077 | 71.3% | 31.1% |
+| BTCUSDT | +0.020 | 0.96 | 33.9% | 35.7% |
+| ETHUSDT | +0.183 | 0.28 | 64.8% | 18.7% |
+| SOLUSDT | +0.023 | 0.07 | 70.7% | 29.0% |
 
 ![chart](analysis_volclustering.png)
 
