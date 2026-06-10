@@ -20,6 +20,7 @@ SECTIONS = [
     ("analysis_volclustering.md", None),
     ("analysis_epps.md", None),
     ("analysis_tape.md", None),
+    ("analysis_anomalies.md", None),
     ("backtest.md", None),
 ]
 

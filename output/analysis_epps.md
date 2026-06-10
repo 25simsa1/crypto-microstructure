@@ -1,14 +1,14 @@
 # Epps effect
 
-_Data: 2026-06-10 05:03 → 06:28 UTC (~1.4 h of single-venue Binance.US capture). Conclusions are conditional on this one overnight session._
+_Data: 2026-06-10 05:03 → 07:24 UTC (~2.4 h of single-venue Binance.US capture). Conclusions are conditional on this one overnight session._
 
 | pair | corr @ 1s | corr @ 300s | interval reaching half of 300s corr |
 |---|---|---|---|
-| BTCUSDT/ETHUSDT | +0.335 | +0.940 | 2s |
-| BTCUSDT/SOLUSDT | +0.399 | +0.825 | 2s |
-| ETHUSDT/SOLUSDT | +0.372 | +0.859 | 2s |
+| BTCUSDT/ETHUSDT | +0.346 | +0.949 | 2s |
+| BTCUSDT/SOLUSDT | +0.388 | +0.913 | 2s |
+| ETHUSDT/SOLUSDT | +0.378 | +0.916 | 2s |
 
-Observations per interval: 4,128 at 1s down to 17 at 300s.
+Observations per interval: 6,708 at 1s down to 28 at 300s.
 
 ![chart](analysis_epps.png)
 

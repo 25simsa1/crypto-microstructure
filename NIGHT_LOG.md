@@ -45,3 +45,7 @@ Running record of the overnight shift. Newest entries at the bottom.
 - ~6.5k snaps/symbol; all three symbols show one ~5s reconnect blip (99.9% coverage) — the quality report catches it.
 - New `analysis_tape.py` in Makefile + FINDINGS: effective vs quoted spread, sign-ACF with null band, volume-bar flow-vs-return scatter.
 - SOL is the interesting one: effective spread half the quoted (1.57 vs 3.12 bps — takers time their entries inside the wide touch) and sign ACF +0.21 over lags 1-5, the first hint of order-flow memory. BTC/ETH tape still looks memoryless at these counts.
+
+## 03:30 PT — Iteration: anomaly detection
+- New `anomaly.py` (trailing median+MAD episodes, past-only) + `analysis_anomalies.py` wired into Makefile/FINDINGS, with tests on synthetic books with planted events.
+- Two real tuning lessons: (1) MAD needs a double warmup (median first, then deviations) which silently NaN'd the vol detector — made min_periods explicit; (2) MAD-based z on tick-quantized spreads flags routine one-tick flickers (376 "episodes"!) — switched spread/depth to multiplicative thresholds with a 3s minimum duration → 9 genuine episodes: ETH 6 spread blowouts (to ~10-12 bps) + 1 depth evaporation, BTC/SOL one vol shift each.
