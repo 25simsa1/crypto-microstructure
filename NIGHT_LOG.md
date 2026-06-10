@@ -54,3 +54,7 @@ Running record of the overnight shift. Newest entries at the bottom.
 - Added Ljung-Box (10 lags) + Wald-Wolfowitz runs test to the tape analysis, with sanity tests for the runs statistic.
 - SOL's sign memory survived the thicker tape: LB p < 0.001, ACF lags 1-5 = +0.15 — genuine (one-night) order-flow persistence. BTC/ETH instead show mild *alternation* (runs z ≈ +2), i.e. bid-ask bounce.
 - Honest correction: SOL's "effective spread at half the quoted" from the 60-trade tape vanished at 206 trades (3.10 vs 3.12 bps). Early-night descriptive stats don't survive; this is why everything re-runs on the full capture.
+
+## 04:25 PT — Iteration: report polish
+- 11.3k snaps/symbol, 2.4 MB raw. Coverage steady (SOL 99.37% remains the worst, all from a few reconnects).
+- README architecture/diagram updated for the 7 studies + anomaly module; rewrote MORNING.md as the actual morning report: three headline results, overnight decisions, and the four questions that need Simon (continue capture? publish to GitHub? real fee tier? next direction?).

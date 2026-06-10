@@ -30,6 +30,7 @@ backtester that physically cannot look ahead.
   │ parquet.py   symbol-hour partitioned store  │
   │ features.py  microprice, OFI, imbalance,    │
   │              RV / Parkinson / bipower       │
+  │ anomaly.py   spread/depth/vol episode flags │
   │ backtest.py  event replay, walk-the-book    │
   │              fills, deflated Sharpe         │
   │ analysis.py  shared plotting/loading        │
@@ -37,7 +38,7 @@ backtester that physically cannot look ahead.
                   ▼
               scripts/            output/
   build_data.py ──────────────▶ data_quality.md
-  analysis_*.py (4 studies) ──▶ *.png + *.md
+  analysis_*.py (7 studies) ──▶ *.png + *.md
   run_backtest.py ────────────▶ backtest.md
   build_findings.py ──────────▶ ../FINDINGS.md
 ```
@@ -46,7 +47,7 @@ backtester that physically cannot look ahead.
 
 ```bash
 python3 -m venv .venv && .venv/bin/pip install -e '.[dev]'
-make all     # parquet + quality report + 4 studies + backtest + FINDINGS.md
+make all     # parquet + quality report + 7 studies + backtest + FINDINGS.md
 make check   # ruff + mypy --strict + pytest
 ```
 
@@ -61,6 +62,7 @@ run separately: `caffeinate -i python3 logger.py`.
 | `quality.py` | validation | gaps, crossed books, backwards timestamps — known before any analysis |
 | `parquet.py` | columnar store | idempotent; only rewrites partitions that grew |
 | `features.py` | feature library | every formula stated in the docstring, unit-tested against hand-computed numbers |
+| `anomaly.py` | episode detection | trailing-robust thresholds tuned on real tick-quantized data, not textbook z-scores |
 | `backtest.py` | event-driven replay | decisions at snapshot *t* execute against snapshot *t+1* — lookahead is structurally impossible |
 
 ## Honesty constraints

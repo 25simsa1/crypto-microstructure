@@ -7,7 +7,7 @@ all: data analyses backtest findings
 data:            ## refresh parquet store + data-quality report
 	$(PY) scripts/build_data.py
 
-analyses: data   ## run the four studies (PNG + md each)
+analyses: data   ## run all studies (PNG + md each)
 	$(PY) scripts/analysis_seasonality.py
 	$(PY) scripts/analysis_imbalance.py
 	$(PY) scripts/analysis_leadlag.py
