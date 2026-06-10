@@ -14,7 +14,7 @@ Sharpe, random-strategy nulls).
 
 ---
 
-_Generated 2026-06-10 08:20 UTC._
+_Generated 2026-06-10 08:53 UTC._
 
 
 ---
@@ -23,8 +23,8 @@ _Generated 2026-06-10 08:20 UTC._
 
 ## BTCUSDT
 
-- snapshots: **11,361** (2026-06-10 05:03:02 UTC → 2026-06-10 08:19:19 UTC)
-- trades: **276**
+- snapshots: **13,311** (2026-06-10 05:03:02 UTC → 2026-06-10 08:52:18 UTC)
+- trades: **317**
 - coverage: **99.96%** (5s lost across 1 gap(s))
 - crossed books: **0**
 - backwards timestamps: **0**
@@ -35,9 +35,9 @@ _Generated 2026-06-10 08:20 UTC._
 
 ## ETHUSDT
 
-- snapshots: **11,337** (2026-06-10 05:03:02 UTC → 2026-06-10 08:19:19 UTC)
-- trades: **259**
-- coverage: **99.86%** (17s lost across 3 gap(s))
+- snapshots: **13,300** (2026-06-10 05:03:02 UTC → 2026-06-10 08:52:18 UTC)
+- trades: **311**
+- coverage: **99.88%** (17s lost across 3 gap(s))
 - crossed books: **0**
 - backwards timestamps: **0**
 
@@ -49,9 +49,9 @@ _Generated 2026-06-10 08:20 UTC._
 
 ## SOLUSDT
 
-- snapshots: **10,921** (2026-06-10 05:03:02 UTC → 2026-06-10 08:19:18 UTC)
-- trades: **226**
-- coverage: **99.37%** (74s lost across 11 gap(s))
+- snapshots: **12,841** (2026-06-10 05:03:02 UTC → 2026-06-10 08:52:18 UTC)
+- trades: **283**
+- coverage: **99.46%** (74s lost across 11 gap(s))
 - crossed books: **0**
 - backwards timestamps: **0**
 
@@ -74,13 +74,13 @@ _Generated 2026-06-10 08:20 UTC._
 
 ## Intraday liquidity profile
 
-_Data: 2026-06-10 05:03 → 08:19 UTC (~3.3 h of single-venue Binance.US capture). Conclusions are conditional on this one overnight session._
+_Data: 2026-06-10 05:03 → 08:52 UTC (~3.8 h of single-venue Binance.US capture). Conclusions are conditional on this one overnight session._
 
 | symbol | median spread (bps) | spread max/min across buckets | median depth ±10bps | depth max/min |
 |---|---|---|---|---|
-| BTCUSDT | 2.48 | 1.46x | $205,644 | 1.19x |
-| ETHUSDT | 2.50 | 1.31x | $53,791 | 1.64x |
-| SOLUSDT | 3.12 | 1.51x | $18,515 | 1.22x |
+| BTCUSDT | 2.54 | 1.64x | $205,301 | 1.19x |
+| ETHUSDT | 2.51 | 1.31x | $53,619 | 1.64x |
+| SOLUSDT | 3.12 | 1.51x | $18,337 | 1.32x |
 
 ![chart](output/analysis_seasonality.png)
 
@@ -90,39 +90,39 @@ _Data: 2026-06-10 05:03 → 08:19 UTC (~3.3 h of single-venue Binance.US capture
 
 ## Book pressure vs short-horizon returns
 
-_Data: 2026-06-10 05:03 → 08:19 UTC (~3.3 h of single-venue Binance.US capture). Conclusions are conditional on this one overnight session._
+_Data: 2026-06-10 05:03 → 08:52 UTC (~3.8 h of single-venue Binance.US capture). Conclusions are conditional on this one overnight session._
 
 Chronological 70/30 split. HAC (Newey–West) t-stats, lags = horizon. **27 hypotheses tested → Bonferroni threshold |t| > 3.58** (plain |t|>1.96 would be cherry-picking).
 
 | symbol | feature | horizon | train t (HAC) | OOS corr | OOS hit rate | n test |
 |---|---|---|---|---|---|---|
-| BTCUSDT | imb5 | 5s | +1.98 | +0.042 | 52.9% | 2,318 |
-| BTCUSDT | imb5 | 30s | +0.93 | +0.059 | 51.9% | 2,318 |
-| BTCUSDT | imb5 | 60s | +0.40 | +0.018 | 51.9% | 2,318 |
-| BTCUSDT | ofi10 | 5s | -0.59 | +0.047 | 51.0% | 2,318 |
-| BTCUSDT | ofi10 | 30s | -0.12 | -0.015 | 49.5% | 2,318 |
-| BTCUSDT | ofi10 | 60s | -0.13 | -0.014 | 50.3% | 2,318 |
-| BTCUSDT | mprem | 5s | -6.76 | -0.062 | 50.8% | 2,318 |
-| BTCUSDT | mprem | 30s | -2.83 | -0.016 | 52.3% | 2,318 |
-| BTCUSDT | mprem | 60s | -1.51 | -0.011 | 54.3% | 2,318 |
-| ETHUSDT | imb5 | 5s | +2.64 | +0.027 | 51.4% | 2,260 |
-| ETHUSDT | imb5 | 30s | +2.52 | +0.019 | 52.0% | 2,260 |
-| ETHUSDT | imb5 | 60s | +2.46 | -0.016 | 52.5% | 2,260 |
-| ETHUSDT | ofi10 | 5s | -0.82 | +0.091 | 53.1% | 2,260 |
-| ETHUSDT | ofi10 | 30s | +0.14 | +0.098 | 50.7% | 2,260 |
-| ETHUSDT | ofi10 | 60s | -0.66 | +0.116 | 53.6% | 2,260 |
-| ETHUSDT | mprem | 5s | -8.14 | -0.084 | 51.4% | 2,260 |
-| ETHUSDT | mprem | 30s | -4.24 | -0.025 | 54.0% | 2,260 |
-| ETHUSDT | mprem | 60s | -2.47 | -0.049 | 52.1% | 2,260 |
-| SOLUSDT | imb5 | 5s | +1.01 | -0.043 | 50.0% | 1,575 |
-| SOLUSDT | imb5 | 30s | -1.47 | -0.152 | 46.9% | 1,575 |
-| SOLUSDT | imb5 | 60s | -1.14 | -0.113 | 50.8% | 1,575 |
-| SOLUSDT | ofi10 | 5s | +0.05 | +0.043 | 53.8% | 1,575 |
-| SOLUSDT | ofi10 | 30s | -0.02 | -0.032 | 47.4% | 1,575 |
-| SOLUSDT | ofi10 | 60s | +0.03 | +0.002 | 48.1% | 1,575 |
-| SOLUSDT | mprem | 5s | -1.13 | -0.088 | 49.5% | 1,575 |
-| SOLUSDT | mprem | 30s | -1.50 | -0.077 | 47.0% | 1,575 |
-| SOLUSDT | mprem | 60s | -0.18 | -0.110 | 45.8% | 1,575 |
+| BTCUSDT | imb5 | 5s | +1.47 | +0.047 | 51.3% | 2,777 |
+| BTCUSDT | imb5 | 30s | +0.77 | +0.060 | 52.6% | 2,777 |
+| BTCUSDT | imb5 | 60s | +0.33 | +0.010 | 54.1% | 2,777 |
+| BTCUSDT | ofi10 | 5s | -0.51 | +0.017 | 52.3% | 2,777 |
+| BTCUSDT | ofi10 | 30s | -0.16 | -0.004 | 51.2% | 2,777 |
+| BTCUSDT | ofi10 | 60s | -0.12 | -0.025 | 50.3% | 2,777 |
+| BTCUSDT | mprem | 5s | -6.27 | -0.072 | 50.0% | 2,777 |
+| BTCUSDT | mprem | 30s | -2.34 | -0.054 | 48.3% | 2,777 |
+| BTCUSDT | mprem | 60s | -0.96 | -0.063 | 47.5% | 2,777 |
+| ETHUSDT | imb5 | 5s | +2.18 | -0.009 | 51.2% | 2,784 |
+| ETHUSDT | imb5 | 30s | +2.21 | +0.002 | 55.1% | 2,784 |
+| ETHUSDT | imb5 | 60s | +1.83 | -0.027 | 58.4% | 2,784 |
+| ETHUSDT | ofi10 | 5s | +1.13 | +0.010 | 49.9% | 2,784 |
+| ETHUSDT | ofi10 | 30s | +0.85 | +0.041 | 50.3% | 2,784 |
+| ETHUSDT | ofi10 | 60s | +0.70 | +0.045 | 49.9% | 2,784 |
+| ETHUSDT | mprem | 5s | -8.89 | -0.085 | 48.6% | 2,784 |
+| ETHUSDT | mprem | 30s | -3.81 | -0.062 | 47.6% | 2,784 |
+| ETHUSDT | mprem | 60s | -2.50 | -0.062 | 44.2% | 2,784 |
+| SOLUSDT | imb5 | 5s | +0.83 | +0.017 | 48.3% | 1,962 |
+| SOLUSDT | imb5 | 30s | -1.82 | -0.067 | 45.7% | 1,962 |
+| SOLUSDT | imb5 | 60s | -1.18 | -0.091 | 49.1% | 1,962 |
+| SOLUSDT | ofi10 | 5s | +0.14 | +0.022 | 51.8% | 1,962 |
+| SOLUSDT | ofi10 | 30s | -0.74 | +0.044 | 53.6% | 1,962 |
+| SOLUSDT | ofi10 | 60s | -0.41 | +0.073 | 52.7% | 1,962 |
+| SOLUSDT | mprem | 5s | -1.33 | -0.009 | 50.3% | 1,962 |
+| SOLUSDT | mprem | 30s | -1.66 | +0.019 | 51.7% | 1,962 |
+| SOLUSDT | mprem | 60s | -0.39 | -0.063 | 48.0% | 1,962 |
 
 ![chart](output/analysis_imbalance.png)
 
@@ -132,13 +132,13 @@ Chronological 70/30 split. HAC (Newey–West) t-stats, lags = horizon. **27 hypo
 
 ## Cross-asset lead-lag
 
-_Data: 2026-06-10 05:03 → 08:19 UTC (~3.3 h of single-venue Binance.US capture). Conclusions are conditional on this one overnight session._
+_Data: 2026-06-10 05:03 → 08:52 UTC (~3.8 h of single-venue Binance.US capture). Conclusions are conditional on this one overnight session._
 
 | pair | contemporaneous corr | peak lag | peak corr | 95% null band |
 |---|---|---|---|---|
-| BTCUSDT/ETHUSDT | +0.349 | +0s | +0.349 | 0.021 |
-| BTCUSDT/SOLUSDT | +0.390 | +0s | +0.390 | 0.021 |
-| ETHUSDT/SOLUSDT | +0.386 | +0s | +0.386 | 0.021 |
+| BTCUSDT/ETHUSDT | +0.341 | +0s | +0.341 | 0.019 |
+| BTCUSDT/SOLUSDT | +0.374 | +0s | +0.374 | 0.019 |
+| ETHUSDT/SOLUSDT | +0.384 | +0s | +0.384 | 0.019 |
 
 ![chart](output/analysis_leadlag.png)
 
@@ -148,13 +148,13 @@ _Data: 2026-06-10 05:03 → 08:19 UTC (~3.3 h of single-venue Binance.US capture
 
 ## Volatility clustering and jumps
 
-_Data: 2026-06-10 05:03 → 08:19 UTC (~3.3 h of single-venue Binance.US capture). Conclusions are conditional on this one overnight session._
+_Data: 2026-06-10 05:03 → 08:52 UTC (~3.8 h of single-venue Binance.US capture). Conclusions are conditional on this one overnight session._
 
 | symbol | mean ACF lags 1-5 | Ljung-Box p (10 lags) | median ann. vol | jump share of variance |
 |---|---|---|---|---|
-| BTCUSDT | +0.316 | 2.8e-29 | 38.3% | 31.6% |
-| ETHUSDT | +0.083 | 0.011 | 57.4% | 23.5% |
-| SOLUSDT | +0.040 | 0.0044 | 64.2% | 33.5% |
+| BTCUSDT | +0.310 | 8.2e-41 | 40.9% | 29.2% |
+| ETHUSDT | +0.098 | 0.034 | 57.9% | 22.9% |
+| SOLUSDT | +0.091 | 0.0014 | 66.1% | 34.9% |
 
 ![chart](output/analysis_volclustering.png)
 
@@ -164,15 +164,15 @@ A small Ljung–Box p-value rejects 'RV is white noise' — the signature of vol
 
 ## Epps effect
 
-_Data: 2026-06-10 05:03 → 08:19 UTC (~3.3 h of single-venue Binance.US capture). Conclusions are conditional on this one overnight session._
+_Data: 2026-06-10 05:03 → 08:52 UTC (~3.8 h of single-venue Binance.US capture). Conclusions are conditional on this one overnight session._
 
 | pair | corr @ 1s | corr @ 300s | interval reaching half of 300s corr |
 |---|---|---|---|
-| BTCUSDT/ETHUSDT | +0.349 | +0.937 | 2s |
-| BTCUSDT/SOLUSDT | +0.390 | +0.888 | 2s |
-| ETHUSDT/SOLUSDT | +0.386 | +0.890 | 2s |
+| BTCUSDT/ETHUSDT | +0.341 | +0.942 | 2s |
+| BTCUSDT/SOLUSDT | +0.374 | +0.873 | 2s |
+| ETHUSDT/SOLUSDT | +0.384 | +0.870 | 2s |
 
-Observations per interval: 9,154 at 1s down to 39 at 300s.
+Observations per interval: 10,878 at 1s down to 46 at 300s.
 
 ![chart](output/analysis_epps.png)
 
@@ -182,15 +182,15 @@ Observations per interval: 9,154 at 1s down to 39 at 300s.
 
 ## Trade-tape analysis
 
-_Data: 2026-06-10 05:03 → 08:19 UTC (~3.3 h of single-venue Binance.US capture). Conclusions are conditional on this one overnight session._
+_Data: 2026-06-10 05:03 → 08:52 UTC (~3.8 h of single-venue Binance.US capture). Conclusions are conditional on this one overnight session._
 
 | symbol | trades | buy share | median eff spread (bps) | median quoted (bps) | sign ACF lags 1-5 | LB p (10 lags) | runs z | volume bars |
 |---|---|---|---|---|---|---|---|---|
-| BTCUSDT | 276 | 53% | 2.38 | 2.48 | -0.027 | 0.002 | +2.13 | 78 |
-| ETHUSDT | 260 | 53% | 2.40 | 2.50 | +0.026 | 0.022 | +2.18 | 100 |
-| SOLUSDT | 227 | 52% | 3.10 | 3.12 | +0.162 | 0.000 | -1.90 | 81 |
+| BTCUSDT | 317 | 52% | 2.39 | 2.54 | -0.026 | 0.005 | +2.44 | 90 |
+| ETHUSDT | 311 | 50% | 2.40 | 2.51 | +0.046 | 0.011 | +1.65 | 117 |
+| SOLUSDT | 283 | 52% | 3.11 | 3.12 | +0.165 | 0.000 | -2.89 | 100 |
 
-Pooled corr(net flow, bar return) across symbols: **+0.04**.
+Pooled corr(net flow, bar return) across symbols: **+0.03**.
 
 ![chart](output/analysis_tape.png)
 
@@ -202,7 +202,7 @@ Pooled corr(net flow, bar return) across symbols: **+0.04**.
 
 ## Anomaly episodes
 
-_Data: 2026-06-10 05:03 → 08:19 UTC (~3.3 h of single-venue Binance.US capture). Conclusions are conditional on this one overnight session._
+_Data: 2026-06-10 05:03 → 08:52 UTC (~3.8 h of single-venue Binance.US capture). Conclusions are conditional on this one overnight session._
 
 Detectors use trailing median + MAD only (no future data). Spread spikes: >4x the trailing 15-min median for 3s+. Depth evaporation: <15% of trailing median within ±10 bps for 3s+. Vol shifts: 1-min RV >6 MADs over 30 min.
 
@@ -217,9 +217,12 @@ Detectors use trailing median + MAD only (no future data). Spread spikes: >4x th
 | ETHUSDT | depth_evaporation | 07:00:19 | 6s | 8.11e+03 | 5.91e+04 |
 | ETHUSDT | spread_spike | 07:17:18 | 6s | 13 | 2.57 |
 | ETHUSDT | vol_shift | 07:34:00 | 0s | 4e-06 | 5.17e-07 |
+| ETHUSDT | vol_shift | 08:32:00 | 0s | 3.01e-06 | 6.14e-07 |
+| ETHUSDT | spread_spike | 08:39:56 | 4s | 12.5 | 2.27 |
+| ETHUSDT | spread_spike | 08:47:02 | 3s | 15.7 | 2.52 |
 | SOLUSDT | vol_shift | 07:11:00 | 0s | 4.22e-06 | 6.24e-07 |
 
-**10 episode(s) detected.**
+**13 episode(s) detected.**
 
 ![chart](output/analysis_anomalies.png)
 
@@ -227,15 +230,15 @@ Detectors use trailing median + MAD only (no future data). Spread spikes: >4x th
 
 ## Backtest: imbalance strategy family vs random null
 
-_Data: 2026-06-10 05:03 → 08:19 UTC (~3.3 h of single-venue Binance.US capture). Conclusions are conditional on this one overnight session._
+_Data: 2026-06-10 05:03 → 08:52 UTC (~3.8 h of single-venue Binance.US capture). Conclusions are conditional on this one overnight session._
 
 Execution: taker-only, walk the displayed book, fills capped at displayed size, 10 bps taker fee per side, one-snapshot (~1 s) execution delay. Sharpe annualized from ~1 s bars.
 
 | symbol | best cfg (θ/hold) | ann. Sharpe | deflated SR (9 trials) | trades | fees | max DD | random null Sharpe (μ±σ, 50 seeds) | random p95 |
 |---|---|---|---|---|---|---|---|---|
-| BTCUSDT | 0.3/60s | -507.82 | 0.00 | 117 | $16.59 | -0.203% | -482.90 ± 23.32 | -442.59 |
-| ETHUSDT | 0.3/60s | -369.72 | 0.00 | 86 | $8.74 | -0.108% | -453.87 ± 25.53 | -411.78 |
-| SOLUSDT | 0.7/60s | -653.47 | 0.00 | 192 | $24.67 | -0.300% | -456.84 ± 26.35 | -414.93 |
+| BTCUSDT | 0.3/60s | -508.03 | 0.00 | 150 | $20.77 | -0.242% | -480.01 ± 20.70 | -449.13 |
+| ETHUSDT | 0.3/60s | -401.47 | 0.00 | 119 | $12.00 | -0.144% | -452.75 ± 23.41 | -418.68 |
+| SOLUSDT | 0.3/60s | -650.51 | 0.00 | 236 | $35.04 | -0.451% | -453.49 ± 25.60 | -414.50 |
 
 ![chart](output/backtest.png)
 

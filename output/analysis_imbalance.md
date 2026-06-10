@@ -1,38 +1,38 @@
 # Book pressure vs short-horizon returns
 
-_Data: 2026-06-10 05:03 → 08:19 UTC (~3.3 h of single-venue Binance.US capture). Conclusions are conditional on this one overnight session._
+_Data: 2026-06-10 05:03 → 08:52 UTC (~3.8 h of single-venue Binance.US capture). Conclusions are conditional on this one overnight session._
 
 Chronological 70/30 split. HAC (Newey–West) t-stats, lags = horizon. **27 hypotheses tested → Bonferroni threshold |t| > 3.58** (plain |t|>1.96 would be cherry-picking).
 
 | symbol | feature | horizon | train t (HAC) | OOS corr | OOS hit rate | n test |
 |---|---|---|---|---|---|---|
-| BTCUSDT | imb5 | 5s | +1.98 | +0.042 | 52.9% | 2,318 |
-| BTCUSDT | imb5 | 30s | +0.93 | +0.059 | 51.9% | 2,318 |
-| BTCUSDT | imb5 | 60s | +0.40 | +0.018 | 51.9% | 2,318 |
-| BTCUSDT | ofi10 | 5s | -0.59 | +0.047 | 51.0% | 2,318 |
-| BTCUSDT | ofi10 | 30s | -0.12 | -0.015 | 49.5% | 2,318 |
-| BTCUSDT | ofi10 | 60s | -0.13 | -0.014 | 50.3% | 2,318 |
-| BTCUSDT | mprem | 5s | -6.76 | -0.062 | 50.8% | 2,318 |
-| BTCUSDT | mprem | 30s | -2.83 | -0.016 | 52.3% | 2,318 |
-| BTCUSDT | mprem | 60s | -1.51 | -0.011 | 54.3% | 2,318 |
-| ETHUSDT | imb5 | 5s | +2.64 | +0.027 | 51.4% | 2,260 |
-| ETHUSDT | imb5 | 30s | +2.52 | +0.019 | 52.0% | 2,260 |
-| ETHUSDT | imb5 | 60s | +2.46 | -0.016 | 52.5% | 2,260 |
-| ETHUSDT | ofi10 | 5s | -0.82 | +0.091 | 53.1% | 2,260 |
-| ETHUSDT | ofi10 | 30s | +0.14 | +0.098 | 50.7% | 2,260 |
-| ETHUSDT | ofi10 | 60s | -0.66 | +0.116 | 53.6% | 2,260 |
-| ETHUSDT | mprem | 5s | -8.14 | -0.084 | 51.4% | 2,260 |
-| ETHUSDT | mprem | 30s | -4.24 | -0.025 | 54.0% | 2,260 |
-| ETHUSDT | mprem | 60s | -2.47 | -0.049 | 52.1% | 2,260 |
-| SOLUSDT | imb5 | 5s | +1.01 | -0.043 | 50.0% | 1,575 |
-| SOLUSDT | imb5 | 30s | -1.47 | -0.152 | 46.9% | 1,575 |
-| SOLUSDT | imb5 | 60s | -1.14 | -0.113 | 50.8% | 1,575 |
-| SOLUSDT | ofi10 | 5s | +0.05 | +0.043 | 53.8% | 1,575 |
-| SOLUSDT | ofi10 | 30s | -0.02 | -0.032 | 47.4% | 1,575 |
-| SOLUSDT | ofi10 | 60s | +0.03 | +0.002 | 48.1% | 1,575 |
-| SOLUSDT | mprem | 5s | -1.13 | -0.088 | 49.5% | 1,575 |
-| SOLUSDT | mprem | 30s | -1.50 | -0.077 | 47.0% | 1,575 |
-| SOLUSDT | mprem | 60s | -0.18 | -0.110 | 45.8% | 1,575 |
+| BTCUSDT | imb5 | 5s | +1.47 | +0.047 | 51.3% | 2,777 |
+| BTCUSDT | imb5 | 30s | +0.77 | +0.060 | 52.6% | 2,777 |
+| BTCUSDT | imb5 | 60s | +0.33 | +0.010 | 54.1% | 2,777 |
+| BTCUSDT | ofi10 | 5s | -0.51 | +0.017 | 52.3% | 2,777 |
+| BTCUSDT | ofi10 | 30s | -0.16 | -0.004 | 51.2% | 2,777 |
+| BTCUSDT | ofi10 | 60s | -0.12 | -0.025 | 50.3% | 2,777 |
+| BTCUSDT | mprem | 5s | -6.27 | -0.072 | 50.0% | 2,777 |
+| BTCUSDT | mprem | 30s | -2.34 | -0.054 | 48.3% | 2,777 |
+| BTCUSDT | mprem | 60s | -0.96 | -0.063 | 47.5% | 2,777 |
+| ETHUSDT | imb5 | 5s | +2.18 | -0.009 | 51.2% | 2,784 |
+| ETHUSDT | imb5 | 30s | +2.21 | +0.002 | 55.1% | 2,784 |
+| ETHUSDT | imb5 | 60s | +1.83 | -0.027 | 58.4% | 2,784 |
+| ETHUSDT | ofi10 | 5s | +1.13 | +0.010 | 49.9% | 2,784 |
+| ETHUSDT | ofi10 | 30s | +0.85 | +0.041 | 50.3% | 2,784 |
+| ETHUSDT | ofi10 | 60s | +0.70 | +0.045 | 49.9% | 2,784 |
+| ETHUSDT | mprem | 5s | -8.89 | -0.085 | 48.6% | 2,784 |
+| ETHUSDT | mprem | 30s | -3.81 | -0.062 | 47.6% | 2,784 |
+| ETHUSDT | mprem | 60s | -2.50 | -0.062 | 44.2% | 2,784 |
+| SOLUSDT | imb5 | 5s | +0.83 | +0.017 | 48.3% | 1,962 |
+| SOLUSDT | imb5 | 30s | -1.82 | -0.067 | 45.7% | 1,962 |
+| SOLUSDT | imb5 | 60s | -1.18 | -0.091 | 49.1% | 1,962 |
+| SOLUSDT | ofi10 | 5s | +0.14 | +0.022 | 51.8% | 1,962 |
+| SOLUSDT | ofi10 | 30s | -0.74 | +0.044 | 53.6% | 1,962 |
+| SOLUSDT | ofi10 | 60s | -0.41 | +0.073 | 52.7% | 1,962 |
+| SOLUSDT | mprem | 5s | -1.33 | -0.009 | 50.3% | 1,962 |
+| SOLUSDT | mprem | 30s | -1.66 | +0.019 | 51.7% | 1,962 |
+| SOLUSDT | mprem | 60s | -0.39 | -0.063 | 48.0% | 1,962 |
 
 ![chart](analysis_imbalance.png)
 

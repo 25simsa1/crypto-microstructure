@@ -58,3 +58,8 @@ Running record of the overnight shift. Newest entries at the bottom.
 ## 04:25 PT — Iteration: report polish
 - 11.3k snaps/symbol, 2.4 MB raw. Coverage steady (SOL 99.37% remains the worst, all from a few reconnects).
 - README architecture/diagram updated for the 7 studies + anomaly module; rewrote MORNING.md as the actual morning report: three headline results, overnight decisions, and the four questions that need Simon (continue capture? publish to GitHub? real fee tier? next direction?).
+
+## 04:55 PT — Refresh on 13.3k snaps/symbol
+- First Bonferroni-clearing result appeared: BTC mprem @ 5s, train t = −6.27 (HAC). But it's negative — microprice premium *mean-reverts* at 5s rather than predicting continuation, OOS corr only −0.07, hit rate 50%. Reads as bid-ask-bounce reversion in a stale 1s mid, not signal; flagged as such rather than celebrated.
+- SOL order-flow persistence now confirmed by both tests (LB p<0.001, runs z = −2.89). BTC keeps the opposite signature (runs z = +2.44, alternation).
+- 13 anomaly episodes; coverage steady ≥99.4% everywhere.

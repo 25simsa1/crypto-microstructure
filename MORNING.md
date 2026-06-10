@@ -12,7 +12,9 @@ play-by-play.
 1. **SOL shows real order-flow memory** — trade-sign Ljung–Box p < 0.001,
    ACF(1–5) ≈ +0.15. BTC/ETH show the opposite (bid-ask bounce
    alternation). One night, one venue — but it's the only signal that
-   survived a significance test.
+   survived a significance test. (BTC later produced one Bonferroni-clearing
+   t-stat — microprice premium at 5 s — but wrong-signed vs theory and
+   OOS-weak: bid-ask-bounce mean reversion, not signal.)
 2. **Textbook Epps effect** — BTC/ETH return correlation is 0.34 at 1 s
    sampling and 0.94 at 5 min. Cross-asset information takes ~minutes to
    fully propagate on this venue; this is also why naive 1 s lead-lag
