@@ -2,7 +2,7 @@ PY := .venv/bin/python
 
 .PHONY: all data analyses backtest findings test lint typecheck check clean
 
-all: data analyses backtest findings
+all: data analyses backtest replication findings
 
 data:            ## refresh parquet stores + quality reports (both captures)
 	$(PY) scripts/build_data.py
@@ -19,6 +19,9 @@ analyses: data   ## run all studies (PNG + md each)
 
 backtest: data   ## strategy family vs random null
 	$(PY) scripts/run_backtest.py
+
+replication:     ## run the pre-registered replication (frozen procedure)
+	$(PY) scripts/replication_run.py
 
 findings:        ## assemble FINDINGS.md from the latest outputs
 	$(PY) scripts/build_findings.py
