@@ -1,4 +1,4 @@
-# Good morning ☕ — overnight report & questions
+# Overnight report & questions
 
 **TL;DR:** the loggers ran all night (99.3–99.9% coverage). On top of the
 capture I built a full research platform — typed data layer → Parquet,
