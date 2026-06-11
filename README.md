@@ -5,7 +5,7 @@ Binance.US data: top-20 order book snapshots (~1/s) and the full trade
 tape for BTC, ETH and SOL, captured by two small websocket loggers and
 turned into a typed, tested, reproducible research pipeline.
 
-The point is not a trading strategy — the backtest section concludes,
+Important to note that this is not a trading strategy. The backtest section concludes,
 honestly, that no strategy in the tested family survives fees on this
 data. The point is the *methodology*: clean data layer, hand-verified
 feature definitions, statistics that punish multiple testing, and a
