@@ -9,6 +9,7 @@ Exits non-zero if any venue/symbol has zero snapshots or any crossed book.
 
 import glob
 import gzip
+import itertools
 import json
 import statistics
 import sys
@@ -53,7 +54,7 @@ for venue in ("kraken", "coinbase"):
         ok = False
     for sym, tss in sorted(per_sym.items()):
         tss.sort()
-        gaps = [b - a for a, b in zip(tss, tss[1:])]
+        gaps = [b - a for a, b in itertools.pairwise(tss)]
         span = tss[-1] - tss[0]
         print(f"   {sym}: {len(tss)} snapshots over {span:.0f}s | "
               f"median gap {statistics.median(gaps):.2f}s | max gap {max(gaps):.2f}s")

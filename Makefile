@@ -4,8 +4,9 @@ PY := .venv/bin/python
 
 all: data analyses backtest findings
 
-data:            ## refresh parquet store + data-quality report
+data:            ## refresh parquet stores + quality reports (both captures)
 	$(PY) scripts/build_data.py
+	$(PY) scripts/build_venue_data.py
 
 analyses: data   ## run all studies (PNG + md each)
 	$(PY) scripts/analysis_seasonality.py
