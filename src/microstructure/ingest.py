@@ -92,7 +92,8 @@ def iter_book_snapshots(data_dir: Path) -> Iterator[BookSnapshot]:
     Within one file, snapshots for different symbols are interleaved in
     arrival order. Empty-side snapshots are skipped (cannot price them).
     """
-    for name in sorted(glob.glob(str(data_dir / "book-*.jsonl.gz"))):
+    # night-one files are book-YYYYMMDD-HH; venue files are book-{venue}-...
+    for name in sorted(glob.glob(str(data_dir / "book-[0-9]*.jsonl.gz"))):
         for obj in _iter_jsonl_gz(Path(name)):
             bids = tuple(_level(x) for x in cast("list[object]", obj["bids"]))
             asks = tuple(_level(x) for x in cast("list[object]", obj["asks"]))
@@ -108,7 +109,7 @@ def iter_book_snapshots(data_dir: Path) -> Iterator[BookSnapshot]:
 
 def iter_trades(data_dir: Path) -> Iterator[Trade]:
     """Yield every trade under ``data_dir`` in file order."""
-    for name in sorted(glob.glob(str(data_dir / "trades-*.jsonl.gz"))):
+    for name in sorted(glob.glob(str(data_dir / "trades-[0-9]*.jsonl.gz"))):
         for obj in _iter_jsonl_gz(Path(name)):
             yield Trade(
                 ts=cast("float", obj["ts"]),

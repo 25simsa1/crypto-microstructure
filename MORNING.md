@@ -1,50 +1,61 @@
-# Overnight report & questions
+# Morning report — night two (Kraken + Coinbase) ☕
 
-**TL;DR:** the loggers ran all night (99.3–99.9% coverage). On top of the
-capture I built a full research platform — typed data layer → Parquet,
-tested feature library, 7 statistical studies, an anti-lookahead
-backtester — all in git with `make check` green (ruff + strict mypy +
-34 tests). Read `FINDINGS.md` for results, `NIGHT_LOG.md` for the
-play-by-play.
+## ⚠️ Logger status — one needs your attention
 
-## The three results worth your attention
+- **Coinbase `venue_logger.py`: ETH book FROZEN since 17:09 UTC** (still
+  writing snapshots and healthy heartbeats, but the ETH content never
+  changes — per-symbol book-state corruption). BTC/SOL on Coinbase are
+  fine. **It needs a restart**; this session was not allowed to touch
+  it. Earlier freezes also hit ETH (88 min) and SOL (74 min) mid-day.
+- Kraken logger: healthy.
+- Both venues lost ~28% of the 30 h span to the machine sleeping
+  (attributed explicitly in `output/venue_quality.md`). If you want
+  clean multi-day capture: keep the lid open or `caffeinate` the
+  venue loggers too.
 
-1. **SOL shows real order-flow memory** — trade-sign Ljung–Box p < 0.001,
-   ACF(1–5) ≈ +0.15. BTC/ETH show the opposite (bid-ask bounce
-   alternation). One night, one venue — but it's the only signal that
-   survived a significance test. (BTC later produced one Bonferroni-clearing
-   t-stat — microprice premium at 5 s — but wrong-signed vs theory and
-   OOS-weak: bid-ask-bounce mean reversion, not signal.)
-2. **Textbook Epps effect** — BTC/ETH return correlation is 0.34 at 1 s
-   sampling and 0.94 at 5 min. Cross-asset information takes ~minutes to
-   fully propagate on this venue; this is also why naive 1 s lead-lag
-   finds nothing.
-3. **Everything loses money, provably** — the imbalance strategy family's
-   best config has deflated Sharpe 0.00 and sits inside the random-null
-   distribution. Fees (20 bps round trip) vs spreads (~2 bps) make
-   taker-only HFT structurally unprofitable here. The writeup says so.
+## Replication verdict (pre-registered; full detail in FINDINGS Part II)
 
-## Decisions I made overnight (override any)
+- **H1 — SOL trade-sign memory (the night-one headline): NOT TESTABLE.**
+  The venue capture is book-only; no trade channel was subscribed. This
+  is a capture-design finding — next capture should add trade streams.
+- **H2 — tick-sign analogue: did not replicate.** SOL not significant
+  on Kraken (misses the frozen p<0.001 bar at p=0.00112, same sign);
+  ETH **sign-flipped** (significantly positive vs Binance.US's
+  negative). Post-hoc staleness sensitivity: Kraken verdicts robust;
+  **Coinbase verdicts VOID** (fresh coverage 60-61% < 70%).
+- **H3 — Epps curve: REPLICATED on Kraken** (0.42 → 0.89); FAILED the
+  frozen rise-criterion on Coinbase because its 1 s correlation already
+  starts at 0.70 — effect present but much weaker there.
+- Honest reading: night-one tick-sign dynamics look **venue-specific**
+  (the two new venues agree with each other against Binance.US);
+  Epps-style correlation build-up generalizes qualitatively.
 
-- Kept BTC/ETH/SOL only; skipped the cross-venue Coinbase/Kraken poller
-  (would have meant a third logger process mid-night; clean single-venue
-  story instead, caveats documented).
-- Retracted an early "SOL trades print at half the quoted spread"
-  finding when it died on a thicker tape — it's in NIGHT_LOG as an
-  example of small-sample honesty.
+## Cross-venue results (the dataset's unique capability)
 
-## Questions for you
+- **No exploitable divergence:** Kraken-vs-Coinbase mid divergence
+  median ~0.9 bps, p99 ~4.6 bps, max ~29 bps — **zero seconds** exceed
+  a round trip at your fee levels (145–170 bps taker–taker; 85 bps
+  maker–maker, with fill-risk caveats in the report). Insensitive to
+  the Kraken 0.25–0.50% range; Coinbase's 1.20% taker is the binding
+  cost.
+- **No 1 s lead-lag** between venues (peak at lag 0 everywhere);
+  sub-second leadership is not measurable at 1 snap/s — stated, not
+  papered over.
+- The catch of the day: a fabricated 286 bps ETH "divergence" traced to
+  the frozen Coinbase book → new staleness detector in the quality
+  layer (now part of `make data`).
 
-1. **Stop or continue the capture?** The loggers keep running until you
-   `pkill -f logger.py`. A second night would let the seasonality study
-   make real time-of-day claims. (Multi-night = I'd set up launchd.)
-2. **Publish?** This is GitHub-ready (README, architecture diagram,
-   FINDINGS). Want me to create a repo under 25simsa1 and push? And if
-   so: public or private?
-3. **Backtest fee tier:** I assumed 10 bps taker. If you have an actual
-   Binance.US fee tier in mind (they run promos as low as 0), say so —
-   it changes the backtest conclusion section, not the code.
-4. **Next research direction, if any:** cross-venue price discovery
-   (needs the Coinbase/Kraken poller), maker-side simulation (needs
-   order-book deltas, a bigger logger change), or multi-night
-   seasonality (just needs patience)?
+## Publish prep (Phase 5) — waiting on you
+
+`PUBLISH.md` has the eyeball checklist. Notably: your name/account
+appear in pushed history (NIGHT_LOG/old MORNING revisions) — decide
+"acceptable" vs history-rewrite before flipping public. LICENSE (MIT)
+added. **Nothing was pushed this session**; `git push origin main` is
+on the checklist.
+
+## Next questions
+
+1. Restart the Coinbase logger (and add trade-channel subscriptions so
+   H1 becomes testable on a future capture)?
+2. Push night-two commits and work through PUBLISH.md?
+3. Keep capturing for multi-day seasonality, or stop the loggers?

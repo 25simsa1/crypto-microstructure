@@ -6,9 +6,9 @@ Capture cadence is ~1 snapshot/s/venue: **sub-second lead-lag is not measurable 
 
 | symbol | contemporaneous corr | peak lag | peak corr | leader |
 |---|---|---|---|---|
-| BTC-USD | +0.587 | +0s | +0.587 | tie |
-| ETH-USD | +0.639 | +0s | +0.639 | tie |
-| SOL-USD | +0.667 | +0s | +0.667 | tie |
+| BTC-USD | +0.571 | +0s | +0.571 | tie |
+| ETH-USD | +0.630 | +0s | +0.630 | tie |
+| SOL-USD | +0.653 | +0s | +0.653 | tie |
 
 ## Liquidity (median quoted spread, bps)
 
@@ -22,9 +22,9 @@ Capture cadence is ~1 snapshot/s/venue: **sub-second lead-lag is not measurable 
 
 | symbol | median (bps) | p99 | p99.9 | max |
 |---|---|---|---|---|
-| BTC-USD | 0.9 | 4.4 | 9.9 | 28.7 |
-| ETH-USD | 0.8 | 4.7 | 13.7 | 26.4 |
-| SOL-USD | 0.8 | 4.6 | 11.5 | 25.4 |
+| BTC-USD | 0.9 | 4.6 | 12.6 | 28.7 |
+| ETH-USD | 0.9 | 5.1 | 21.5 | 33.5 |
+| SOL-USD | 0.8 | 4.7 | 14.3 | 25.4 |
 
 | fee scenario | round trip (bps) | seconds exceeding | share |
 |---|---|---|---|
