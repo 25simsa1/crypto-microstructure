@@ -1,15 +1,25 @@
 # crypto-microstructure
 
-A market microstructure research platform built over one night of live
-Binance.US data: top-20 order book snapshots (~1/s) and the full trade
-tape for BTC, ETH and SOL, captured by two small websocket loggers and
-turned into a typed, tested, reproducible research pipeline.
+A market microstructure research platform built on live exchange
+capture across three venues and two sessions: one night of Binance.US
+(top-20 book snapshots ~1/s plus the full trade tape) and a 24h+
+dual-venue Kraken + Coinbase book capture, all turned into a typed,
+tested, reproducible research pipeline.
 
-Important to note that this is not a trading strategy. The backtest section concludes,
-honestly, that no strategy in the tested family survives fees on this
-data. The point is the *methodology*: clean data layer, hand-verified
-feature definitions, statistics that punish multiple testing, and a
-backtester that physically cannot look ahead.
+The point is not a trading strategy. Every headline here is either an
+honest negative or a guarded positive: no strategy in the tested family
+survives retail fees; cross-venue mid divergence never exceeds a
+round-trip at retail fee tiers; and the one night-one signal taken to
+out-of-sample test was **pre-registered before touching the new data**
+(`REPLICATION.md`, frozen) and reported exactly as the registered
+criteria fell — mixed, with one venue's verdicts voided by a
+data-quality discovery the pipeline itself made (a venue feed
+silently freezing while reporting healthy heartbeats).
+
+The point is the *methodology*: clean data layers for both captures,
+hand-verified feature definitions, statistics that punish multiple
+testing, a backtester that physically cannot look ahead, and a
+pre-registered replication with the verdict reported either way.
 
 ## Architecture
 
