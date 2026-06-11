@@ -21,6 +21,9 @@ SECTIONS = [
     ("analysis_epps.md", None),
     ("analysis_tape.md", None),
     ("analysis_anomalies.md", None),
+    ("venue_quality.md", None),
+    ("replication_results.md", None),
+    ("analysis_crossvenue.md", None),
     ("backtest.md", None),
 ]
 

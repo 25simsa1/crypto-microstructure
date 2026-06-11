@@ -110,3 +110,57 @@ def test_venue_parquet_round_trip(tmp_path: Path) -> None:
     assert df["bid_px_5"].isna().all()  # nan-padded beyond recorded depth
     with pytest.raises(FileNotFoundError):
         load_venue_books(out, "coinbase", "SOL-USD")
+
+
+def _flat_book_frame(n: int, change_at: list[int]) -> "object":
+    import pandas as pd
+
+    rows = []
+    px = 100.0
+    for i in range(n):
+        if i in change_at:
+            px += 0.1
+        row = {"ts": float(T0 + i), "bid_px_0": px, "ask_px_0": px + 0.1,
+               "bid_qty_0": 1.0, "ask_qty_0": 1.0}
+        rows.append(row)
+    idx = pd.to_datetime([r["ts"] for r in rows], unit="s", utc=True)
+    return pd.DataFrame(rows, index=idx)
+
+
+def test_stale_mask_flags_long_frozen_runs() -> None:
+    from microstructure.venue import stale_episodes, stale_mask
+
+    # book changes at t=0 and t=300; frozen 0..299 and 300..599
+    df = _flat_book_frame(600, change_at=[300])
+    m = stale_mask(df, min_s=120.0)
+    assert not m.iloc[0]
+    assert not m.iloc[119]  # 119s into the first run: not yet stale
+    assert m.iloc[120]  # 120s frozen -> stale
+    assert not m.iloc[300]  # book changed: run resets
+    assert m.iloc[599]
+    eps = stale_episodes(df, min_s=120.0)
+    assert len(eps) == 2
+
+
+def test_stale_mask_active_book_is_clean() -> None:
+    from microstructure.venue import stale_mask
+
+    df = _flat_book_frame(300, change_at=list(range(0, 300, 30)))  # changes every 30s
+    assert not stale_mask(df, min_s=120.0).any()
+
+
+def test_stale_mask_not_fooled_by_data_gap() -> None:
+    import pandas as pd
+
+    from microstructure.venue import stale_mask
+
+    # 10 snapshots, 17-minute gap (machine asleep), 10 more — book unchanged
+    # across the gap. Elapsed time exceeds min_s but snapshots were NOT
+    # arriving: must not be flagged stale.
+    ts = [T0 + i for i in range(10)] + [T0 + 1020 + i for i in range(10)]
+    df = pd.DataFrame(
+        {"ts": ts, "bid_px_0": 100.0, "ask_px_0": 100.1,
+         "bid_qty_0": 1.0, "ask_qty_0": 1.0},
+        index=pd.to_datetime(ts, unit="s", utc=True),
+    )
+    assert not stale_mask(df, min_s=120.0).any()

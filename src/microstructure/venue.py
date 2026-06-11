@@ -294,3 +294,49 @@ def render_venue_report(quality: dict[str, dict[str, VenueSymbolQuality]]) -> st
             "for heartbeat evidence either way.",
         ]
     return "\n".join(lines)
+
+
+# ---------------------------------------------------------------------------
+# staleness: snapshots keep arriving but the book content is frozen
+# ---------------------------------------------------------------------------
+
+
+def stale_mask(book: pd.DataFrame, min_s: float = 120.0) -> pd.Series:
+    """True where the top of book has been unchanged for >= ``min_s``.
+
+    Catches the failure mode where a logger keeps writing snapshots on
+    schedule (cadence and heartbeats look healthy) but the per-symbol
+    book state stopped updating — observed live on Coinbase/ETH-USD,
+    frozen for 90+ minutes while Kraken moved ~2%.
+    """
+    top = book[["bid_px_0", "ask_px_0", "bid_qty_0", "ask_qty_0"]]
+    changed = top.ne(top.shift()).any(axis=1)
+    changed.iloc[0] = True
+    group = changed.cumsum()
+    run_start = book["ts"].groupby(group).transform("first")
+    # require snapshots to actually be ARRIVING while frozen — otherwise a
+    # data gap (machine asleep) with an unchanged book across it would be
+    # misread as staleness; at ~1 snap/s demand at least min_s/2 of them
+    snaps_in_run = group.groupby(group).cumcount()
+    return ((book["ts"] - run_start) >= min_s) & (snaps_in_run >= min_s / 2)
+
+
+def stale_episodes(
+    book: pd.DataFrame, min_s: float = 120.0
+) -> list[tuple[pd.Timestamp, pd.Timestamp]]:
+    """Contiguous (start, end) spans where ``stale_mask`` is True."""
+    m = stale_mask(book, min_s)
+    out: list[tuple[pd.Timestamp, pd.Timestamp]] = []
+    start: pd.Timestamp | None = None
+    prev: pd.Timestamp | None = None
+    for ts, flag in m.items():
+        if flag and start is None:
+            start = ts
+        elif not flag and start is not None:
+            assert prev is not None
+            out.append((start, prev))
+            start = None
+        prev = ts
+    if start is not None and prev is not None:
+        out.append((start, prev))
+    return out

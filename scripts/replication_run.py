@@ -17,7 +17,7 @@ import numpy as np
 import pandas as pd
 from statsmodels.stats.diagnostic import acorr_ljungbox
 
-from microstructure.venue import VENUES, load_venue_books
+from microstructure.venue import VENUES, load_venue_books, stale_mask
 
 ROOT = Path(__file__).resolve().parent.parent
 PARQUET = ROOT / "parquet"
@@ -165,7 +165,52 @@ def main() -> None:
             f"ETH {verdicts[venue].get('ETH-USD', '?')}, "
             f"Epps {verdicts[venue].get('epps', '?')}"
         )
+    # ------------------------------------------------------------------
+    # POST-HOC sensitivity (NOT registered): the quality layer later found
+    # stale-book episodes (content frozen while snapshots arrive) inside
+    # the matched window on Coinbase. The registered coverage check counts
+    # frozen snapshots as data, so the verdicts above stand by the letter
+    # of the registration; this section reports what changes when stale
+    # runs are excluded and coverage counts only FRESH seconds.
+    # ------------------------------------------------------------------
     lines += [
+        "## POST-HOC sensitivity: stale-book exclusion (not registered)",
+        "",
+        "Frozen-book episodes were discovered after the registered run "
+        "(see venue_quality.md). Same frozen procedure, stale runs "
+        "(>=120 s unchanged top-of-book with snapshots arriving) excluded:",
+        "",
+        "| venue | symbol | fresh coverage | ACF(1-5) | LB p | n ticks "
+        "| registered verdict | sensitivity verdict |",
+        "|---|---|---|---|---|---|---|---|",
+    ]
+    slots = int((W_END - W_START).total_seconds())
+    for venue in VENUES:
+        for sym in ("SOL-USD", "ETH-USD"):
+            book = load_venue_books(PARQUET, venue, sym)
+            fresh = book[~stale_mask(book, min_s=120.0)]
+            wfresh = fresh.loc[W_START:W_END]
+            fresh_cov = float(mid_1s(wfresh).notna().sum()) / slots if len(wfresh) else 0.0
+            acf, lb, n = tick_sign_stats(mid_1s(wfresh))
+            if fresh_cov < VOID_COVERAGE:
+                sens = "VOID (fresh coverage < 70%)"
+            elif np.isnan(acf):
+                sens = "VOID (too few ticks)"
+            elif acf < 0 and lb < 1e-3:
+                sens = "REPLICATED"
+            elif acf > 0 and lb < 1e-3:
+                sens = "SIGN FLIP"
+            else:
+                sens = "not significant"
+            lines.append(
+                f"| {venue} | {sym} | {fresh_cov:.1%} | {acf:+.4f} | {lb:.2e} "
+                f"| {n:,} | {verdicts[venue].get(sym, '?')} | {sens} |"
+            )
+    lines += [
+        "",
+        "Stale runs emit zero mid ticks, so they dilute n rather than "
+        "fabricate signs; agreement between the two columns means the "
+        "registered verdicts were not artifacts of staleness.",
         "",
         "![epps](replication_epps.png)",
         "",
