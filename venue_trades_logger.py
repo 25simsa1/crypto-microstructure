@@ -38,8 +38,9 @@ spot the book capture has.)
 
 Rate-limit compliance: identical posture to venue_logger.py — one
 long-lived connection per venue, one subscribe message (3 symbols),
-nothing sent afterwards but protocol pings; backoff 1s -> 60s cap and
-exit-nonzero after 30 consecutive failures.
+nothing sent afterwards but protocol pings; backoff 1s -> 60s cap,
+retrying indefinitely. Exit ONLY on SIGINT/SIGTERM — transient network
+failure must never end the capture.
 """
 
 import asyncio
@@ -55,7 +56,7 @@ import websockets
 
 DATA_DIR = Path(__file__).parent / "data"
 HEARTBEAT_INTERVAL = 60.0
-MAX_CONSECUTIVE_RETRIES = 30
+MAX_BACKOFF = 60.0  # reconnect backoff cap; retries are indefinite
 
 VENUES = {
     "kraken": {
@@ -224,17 +225,15 @@ async def connection_loop(state: State, writer: HourlyGzipWriter):
                 break
             consecutive_failures += 1
             state.reconnects += 1
-            if consecutive_failures >= MAX_CONSECUTIVE_RETRIES:
-                log(f"giving up after {consecutive_failures} consecutive failures: {e!r}")
-                shutdown.set()
-                return 1
-            log(f"error: {e!r} — reconnect {consecutive_failures}/"
-                f"{MAX_CONSECUTIVE_RETRIES} in {backoff}s")
+            # indefinite retry: transient network failure must never end
+            # the capture — exit only on SIGINT/SIGTERM
+            log(f"error: {e!r} — retry {consecutive_failures} in {backoff:.0f}s "
+                "(retrying indefinitely)")
             try:
                 await asyncio.wait_for(shutdown.wait(), timeout=backoff)
             except asyncio.TimeoutError:
                 pass
-            backoff = min(backoff * 2, 60)
+            backoff = min(backoff * 2, MAX_BACKOFF)
     state.connected = False
     return 0
 

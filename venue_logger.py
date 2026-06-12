@@ -47,9 +47,11 @@ Rate-limit compliance (documented per venue, both feeds are public/unauthed):
   protocol-level pings (websockets library, every 20 s — both venues allow
   standard ping/pong keepalive).
 
-Failure policy: after MAX_CONSECUTIVE_RETRIES (30) failed reconnects in a row
-(~28 minutes at the backoff cap) the process exits non-zero rather than
-retrying forever — a persistent outage should be visible, not silently spun on.
+Failure policy: retry indefinitely with exponential backoff capped at 60 s.
+The process exits ONLY on SIGINT/SIGTERM — transient network failure (DNS
+loss, sleep/wake, venue outage) must never end the capture; visibility comes
+from the heartbeat lines (connected=False) and the watchdog, not from dying.
+(This replaces the old 30-failure give-up that ended the 2026-06-11 capture.)
 """
 
 import asyncio
@@ -66,7 +68,7 @@ DATA_DIR = Path(__file__).parent / "data"
 DEPTH_OUT = 20            # levels per side written per snapshot
 SNAPSHOT_INTERVAL = 1.0   # seconds between emitted book snapshots
 HEARTBEAT_INTERVAL = 60.0
-MAX_CONSECUTIVE_RETRIES = 30
+MAX_BACKOFF = 60.0        # reconnect backoff cap; retries are indefinite
 KRAKEN_DEPTH = 25         # subscription depth (>= DEPTH_OUT)
 
 VENUES = {
@@ -260,17 +262,15 @@ async def connection_loop(state: State):
                 break
             consecutive_failures += 1
             state.reconnects += 1
-            if consecutive_failures >= MAX_CONSECUTIVE_RETRIES:
-                log(f"giving up after {consecutive_failures} consecutive failures: {e!r}")
-                shutdown.set()
-                return 1
-            log(f"error: {e!r} — reconnect {consecutive_failures}/"
-                f"{MAX_CONSECUTIVE_RETRIES} in {backoff}s")
+            # indefinite retry: transient network failure must never end
+            # the capture — exit only on SIGINT/SIGTERM
+            log(f"error: {e!r} — retry {consecutive_failures} in {backoff:.0f}s "
+                "(retrying indefinitely)")
             try:
                 await asyncio.wait_for(shutdown.wait(), timeout=backoff)
             except asyncio.TimeoutError:
                 pass
-            backoff = min(backoff * 2, 60)
+            backoff = min(backoff * 2, MAX_BACKOFF)
     state.connected = False
     return 0
 
