@@ -7,6 +7,7 @@ no kills, no restarts, no writes outside watchdog_status.json.
 """
 
 import argparse
+import gzip
 import json
 import subprocess
 import sys
@@ -20,6 +21,13 @@ DATA_DIR = BASE_DIR / "data"
 STATUS_FILE = BASE_DIR / "watchdog_status.json"
 
 STALE_SECONDS = 120
+# Content freeze: top-of-book unchanged this long WHILE snapshots keep
+# arriving. This is the failure the mtime checks cannot see — observed
+# live on Coinbase/ETH-USD (frozen 90+ min, every other signal green).
+# Mirrors microstructure.venue.stale_mask, reimplemented here streaming
+# and stdlib-only because the watchdog must not depend on the .venv.
+CONTENT_FREEZE_SECONDS = 300
+CONTENT_FREEZE_MIN_SNAPSHOTS = 150  # snapshots must actually be arriving
 ERROR_PATTERNS = ("ERROR", "Exception", "Timeout", "Connection")
 CORE_VENUES = ("kraken", "coinbase")
 OPTIONAL_VENUES = ("binance",)
@@ -79,6 +87,61 @@ def find_data_files(venue):
     return [p for p in DATA_DIR.glob(f"*{venue}*") if p.is_file()]
 
 
+def content_freeze(venue, data_dir=None):
+    """Per-symbol seconds of frozen book content, for symbols over threshold.
+
+    Reads the newest two book files for the venue (two, so an hourly
+    rotation cannot hide a freeze that straddles the boundary), tracks
+    the last time each symbol's top of book CHANGED, and flags symbols
+    whose content is unchanged for >= CONTENT_FREEZE_SECONDS across >=
+    CONTENT_FREEZE_MIN_SNAPSHOTS arriving snapshots. The snapshot-count
+    requirement keeps data gaps (machine asleep) from masquerading as
+    freezes — no snapshots arriving is the mtime checks' job.
+    """
+    base = data_dir if data_dir is not None else DATA_DIR
+    files = sorted(base.glob(f"book-{venue}-*.jsonl.gz"))[-2:]
+    if not files:
+        return {}
+    # symbol -> [last_top, last_change_ts, last_ts, snaps_since_change]
+    state = {}
+    for path in files:
+        try:
+            with gzip.open(path, "rt") as fh:
+                while True:
+                    try:
+                        line = fh.readline()
+                    except EOFError:
+                        break  # live file: unflushed gzip tail
+                    if not line:
+                        break
+                    try:
+                        rec = json.loads(line)
+                    except json.JSONDecodeError:
+                        continue
+                    if rec.get("type") != "book":
+                        continue
+                    sym = rec["symbol"]
+                    top = (
+                        rec["bids"][0][0], rec["bids"][0][1],
+                        rec["asks"][0][0], rec["asks"][0][1],
+                    )
+                    ts = rec["ts"]
+                    st = state.get(sym)
+                    if st is None or top != st[0]:
+                        state[sym] = [top, ts, ts, 0]
+                    else:
+                        st[2] = ts
+                        st[3] += 1
+        except OSError:
+            continue
+    frozen = {}
+    for sym, (_, change_ts, last_ts, snaps) in state.items():
+        dur = last_ts - change_ts
+        if dur >= CONTENT_FREEZE_SECONDS and snaps >= CONTENT_FREEZE_MIN_SNAPSHOTS:
+            frozen[sym] = round(dur, 1)
+    return frozen
+
+
 def count_recent_errors(log_path):
     """Count error-pattern hits in the last 20 lines of the log."""
     try:
@@ -124,6 +187,9 @@ def check_venue(venue, now):
         warnings.append(f"data stale ({int(data_age)}s)")
     if error_count:
         warnings.append(f"{error_count} error line(s) in recent log")
+    frozen = content_freeze(venue)
+    for sym, dur in sorted(frozen.items()):
+        warnings.append(f"{sym} content frozen ({int(dur)}s)")
 
     if not alive:
         status = "dead"
@@ -140,6 +206,7 @@ def check_venue(venue, now):
         "log_age_seconds": log_age,
         "data_age_seconds": data_age,
         "recent_error_count": error_count,
+        "content_frozen": frozen,
         "warnings": warnings,
     }
 
