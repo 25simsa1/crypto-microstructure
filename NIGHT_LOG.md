@@ -168,3 +168,9 @@ play-by-play.
 **Bugs/catches this session:** Coinbase ETH book frozen live (286 bps fake divergence → staleness detector); staleness detector v1 fooled by sleep gaps (171 false episodes → 3 real); night-one ingester glob collided with venue files after the schema grew (book-* matched book-kraken-*).
 
 Loggers left untouched and running per constraints; Coinbase needs a restart (see MORNING.md).
+
+## Night four, 2026-06-14 — H1 re-run executed (the payoff)
+- Trade capture survived two nights (41-47 reconnects each, indefinite-retry policy doing its job). SOL trades: Kraken 34k, Coinbase 149k full capture — ~90-400x night one's 364.
+- Ran the FROZEN H1 procedure (scripts/replication_h1.py), side convention applied (kraken as-is, coinbase negated per SIDE_CONVENTION.md). **VERDICT: REPLICATED on BOTH venues.** SOL matched-hours ACF(1-5) +0.26 (Kraken), +0.33 (Coinbase), LB p ~0, runs z -27/-79. Night one was +0.15.
+- "Too good" hunt: raw ACF 2-3x night one and uniform across all symbols/venues -> suspected print fragmentation (one sweep = many same-side prints). ~30-35% of prints share a timestamp. Collapsing same-ts runs to net events: Kraken SOL drops to +0.159 (≈ night one's +0.15 exactly), Coinbase +0.291 — both still clear the +0.05 bar. Replication is ROBUST to fragmentation, not an artifact. Documented as a labeled post-hoc sensitivity, frozen verdict unchanged.
+- This is the first CROSS-VENUE confirmation of the SOL order-flow-memory finding: night one (Binance.US) + two independent venues now agree. Wired replication_h1.md into FINDINGS Part II.

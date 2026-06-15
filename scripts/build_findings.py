@@ -27,6 +27,7 @@ NIGHT_ONE_SECTIONS = [
 NIGHT_TWO_SECTIONS = [
     ("venue_quality.md", None),
     ("replication_results.md", None),
+    ("replication_h1.md", None),
     ("analysis_crossvenue.md", None),
 ]
 
